@@ -7,21 +7,52 @@
     <style>
         body {
             background-color: #0a0a0a;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
             font-family: 'Courier New', Courier, monospace;
+            overflow: hidden; /* Evita scrolls raros */
         }
 
+        /* TEXTO QUE OCUPA TODA LA PANTALLA */
+        .fullscreen-bg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            text-align: center;
+            color: rgba(0, 255, 65, 0.15); /* Verde muy tenue para que no estorbe la lectura */
+            font-size: 12vw; /* Tamaño basado en el ancho de pantalla */
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            z-index: 0; /* Va detrás de todo */
+            pointer-events: none; /* Para que puedas hacer clic a través de él */
+            white-space: nowrap;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+            animation: pulse 4s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        /* CONTENEDOR DE LA TERMINAL */
         .terminal-window {
-            width: 95%;
-            max-width: 750px;
-            background: #000;
+            position: relative;
+            z-index: 10; /* Por encima del texto gigante */
+            width: 90%;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.85); /* Un poco de transparencia para ver el fondo */
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 1), 0 0 20px rgba(0, 255, 65, 0.2);
             border: 1px solid #1a1a1a;
+            backdrop-filter: blur(5px); /* Efecto cristal moderno */
             overflow: hidden;
         }
 
@@ -43,16 +74,15 @@
             font-size: 12px;
             flex-grow: 1;
             text-align: center;
-            text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .terminal-body {
             padding: 20px;
-            height: 400px;
+            height: 450px;
             overflow-y: auto;
             color: #00ff41;
-            font-size: 15px;
+            font-size: 16px;
             line-height: 1.6;
         }
 
@@ -78,26 +108,17 @@
             color: #00ff41;
             outline: none;
             font-family: inherit;
-            font-size: 15px;
+            font-size: 16px;
             width: 100%;
         }
 
-        /* Efecto de parpadeo al final */
-        .cursor {
-            display: inline-block;
-            width: 8px;
-            height: 15px;
-            background: #00ff41;
-            animation: blink 1s infinite;
-            vertical-align: middle;
-        }
-
-        @keyframes blink { 50% { opacity: 0; } }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: #222; }
     </style>
 </head>
 <body>
+
+<div class="fullscreen-bg">COMEABACKKKKKKKKK</div>
 
 <div class="terminal-window">
     <div class="terminal-header">
@@ -106,13 +127,13 @@
             <span class="dot yellow"></span>
             <span class="dot green"></span>
         </div>
-        <div class="terminal-title">Root-Access — Alejandro-OS</div>
+        <div class="terminal-title">ROOT@ALEJANDRO-OS — SESSION_ACTIVE</div>
     </div>
     
     <div class="terminal-body" id="terminalBody">
-        <div class="output-line">SISTEMA OPERATIVO PERSONALIZADO [Versión 10.0.2026]</div>
-        <div class="output-line">Iniciado para hacer tu día más feliz (si es que puedes con tanto).</div>
-        <div class="output-line">Hazme una pregunta o escribe un nombre...</div>
+        <div class="output-line">SISTEMA OPERATIVO PERSONALIZADO [V. 2026.03.06]</div>
+        <div class="output-line">Cargando módulos de excelencia... OK.</div>
+        <div class="output-line">Esperando órdenes...</div>
         <br>
         <div class="input-wrapper">
             <span class="prompt">admin@manager:~$</span>
@@ -125,37 +146,13 @@
     const userInput = document.getElementById('userInput');
     const terminalBody = document.getElementById('terminalBody');
 
-    // Lógica de respuestas con personalidad
     function getResponse(input) {
         const text = input.toLowerCase();
-
-        // Respuestas por Nombre/Apellido
-        if (text.includes("guzman")) return "Eres el mejor programador. Espero que estés bien, amigo. Sigue dominando el código.";
-        if (text.includes("segovia")) return "El apellido del éxito. No aceptamos menos que la excelencia aquí.";
+        if (text.includes("guzman")) return "El código fluye en sus venas. Un saludo al mejor.";
+        if (text.includes("segovia")) return "Excelencia confirmada. Acceso total concedido.";
+        if (text.includes("quien eres") || text.includes("quién eres")) return "Soy el núcleo del sistema. Inteligencia pura.";
         
-        // Respuestas de Personalidad (Arrogantes/Directas)
-        if (text.includes("como te sientes") || text.includes("cómo te sientes") || text.includes("como estas")) {
-            return "Me siento como alguien que sabe exactamente lo que hace. O sea, perfecto.";
-        }
-        
-        if (text.includes("quien eres") || text.includes("quién eres")) {
-            return "Soy la mente maestra detrás de este sistema. Un Gerente de TI que no pierde el tiempo.";
-        }
-
-        if (text.includes("que amas") || text.includes("qué amas")) {
-            return "Amo el código limpio, los sistemas que no fallan y tener la razón. Casi siempre es lo mismo.";
-        }
-
-        if (text.includes("que odias") || text.includes("qué odias")) {
-            return "Odio la incompetencia, el código mal indentado y que me hagan perder el tiempo con preguntas obvias.";
-        }
-
-        if (text.includes("hazme feliz") || text.includes("dia feliz") || text.includes("día feliz")) {
-            return "Estás hablando conmigo, eso ya debería ser suficiente para mejorar tu día.";
-        }
-
-        // Respuesta por defecto
-        return `Analizando "${input}"... No tengo tiempo para procesar eso. Intenta algo más interesante.`;
+        return `Comando "${input}" no reconocido. Intenta con algo que esté a mi altura.`;
     }
 
     userInput.addEventListener('keydown', function(e) {
@@ -163,26 +160,22 @@
             const val = userInput.value.trim();
             if (val === "") return;
 
-            // Mostrar comando del usuario
             const userLine = document.createElement('div');
             userLine.className = "output-line";
             userLine.innerHTML = `<span class="prompt">admin@manager:~$</span> ${val}`;
             terminalBody.insertBefore(userLine, userInput.parentElement);
 
-            // Generar y mostrar respuesta
             const responseText = getResponse(val);
             const responseLine = document.createElement('div');
             responseLine.className = "response";
             responseLine.textContent = `[SISTEMA]: ${responseText}`;
             terminalBody.insertBefore(responseLine, userInput.parentElement);
 
-            // Limpiar y scroll
             userInput.value = '';
             terminalBody.scrollTop = terminalBody.scrollHeight;
         }
     });
 
-    // Foco automático
     document.querySelector('.terminal-window').addEventListener('click', () => userInput.focus());
 </script>
 
