@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal Interactiva</title>
+    <title>The Boss Terminal</title>
     <style>
-        /* Estilos Globales */
         body {
-            background-color: #121212;
+            background-color: #0a0a0a;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,24 +15,21 @@
             font-family: 'Courier New', Courier, monospace;
         }
 
-        /* Contenedor de la Terminal */
         .terminal-window {
-            width: 90%;
-            max-width: 700px;
+            width: 95%;
+            max-width: 750px;
             background: #000;
-            border-radius: 8px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            border: 1px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            border: 1px solid #1a1a1a;
             overflow: hidden;
         }
 
-        /* Cabecera de la Ventana */
         .terminal-header {
-            background: #252525;
+            background: #1a1a1a;
             padding: 10px 15px;
             display: flex;
             align-items: center;
-            border-bottom: 1px solid #333;
         }
 
         .dots { display: flex; gap: 8px; }
@@ -43,37 +39,38 @@
         .green { background: #27c93f; }
 
         .terminal-title {
-            color: #999;
-            font-size: 13px;
-            margin-left: 20px;
+            color: #666;
+            font-size: 12px;
             flex-grow: 1;
             text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Cuerpo de la Terminal */
         .terminal-body {
             padding: 20px;
-            height: 350px;
+            height: 400px;
             overflow-y: auto;
-            color: #00ff41; /* Verde Matrix */
+            color: #00ff41;
             font-size: 15px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        .output-line { margin-bottom: 8px; }
-        .response { color: #00d9ff; margin-bottom: 12px; } /* Azul para respuestas */
+        .output-line { margin-bottom: 5px; }
+        .response { 
+            color: #fff; 
+            margin-bottom: 15px; 
+            padding-left: 10px;
+            border-left: 2px solid #00ff41;
+        }
 
-        /* Línea de entrada */
         .input-wrapper {
             display: flex;
             align-items: center;
+            margin-top: 10px;
         }
 
-        .prompt {
-            color: #888;
-            margin-right: 10px;
-            white-space: nowrap;
-        }
+        .prompt { color: #00ff41; margin-right: 10px; font-weight: bold; }
 
         #userInput {
             background: transparent;
@@ -85,9 +82,19 @@
             width: 100%;
         }
 
-        /* Scrollbar Personalizado */
-        .terminal-body::-webkit-scrollbar { width: 6px; }
-        .terminal-body::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        /* Efecto de parpadeo al final */
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background: #00ff41;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #222; }
     </style>
 </head>
 <body>
@@ -99,15 +106,16 @@
             <span class="dot yellow"></span>
             <span class="dot green"></span>
         </div>
-        <div class="terminal-title">bash — session@server</div>
+        <div class="terminal-title">Root-Access — Alejandro-OS</div>
     </div>
     
     <div class="terminal-body" id="terminalBody">
-        <div class="output-line">SISTEMA DE GESTIÓN DE PERFILES v2.0.4</div>
-        <div class="output-line">Escriba un apellido para consultar la base de datos...</div>
+        <div class="output-line">SISTEMA OPERATIVO PERSONALIZADO [Versión 10.0.2026]</div>
+        <div class="output-line">Iniciado para hacer tu día más feliz (si es que puedes con tanto).</div>
+        <div class="output-line">Hazme una pregunta o escribe un nombre...</div>
         <br>
         <div class="input-wrapper">
-            <span class="prompt">user@dev:~$</span>
+            <span class="prompt">admin@manager:~$</span>
             <input type="text" id="userInput" autofocus autocomplete="off" spellcheck="false">
         </div>
     </div>
@@ -117,44 +125,65 @@
     const userInput = document.getElementById('userInput');
     const terminalBody = document.getElementById('terminalBody');
 
-    // Base de datos de respuestas
-    const database = {
-        "guzman": "PERFIL ENCONTRADO: Gerente de TI. Especialista en arquitectura de software, experto en ecosistema Laravel y React UI.",
-        "segovia": "PERFIL ENCONTRADO: Desarrollador Senior. Enfoque en optimización de sistemas y soluciones Full-Stack escalables.",
-        "perez": "PERFIL ENCONTRADO: Analista Técnico. Especialidad en soporte e infraestructura de redes.",
-        "hernandez": "PERFIL ENCONTRADO: Desarrollador Frontend. Experto en interfaces modernas y responsive design."
-    };
+    // Lógica de respuestas con personalidad
+    function getResponse(input) {
+        const text = input.toLowerCase();
+
+        // Respuestas por Nombre/Apellido
+        if (text.includes("guzman")) return "Eres el mejor programador. Espero que estés bien, amigo. Sigue dominando el código.";
+        if (text.includes("segovia")) return "El apellido del éxito. No aceptamos menos que la excelencia aquí.";
+        
+        // Respuestas de Personalidad (Arrogantes/Directas)
+        if (text.includes("como te sientes") || text.includes("cómo te sientes") || text.includes("como estas")) {
+            return "Me siento como alguien que sabe exactamente lo que hace. O sea, perfecto.";
+        }
+        
+        if (text.includes("quien eres") || text.includes("quién eres")) {
+            return "Soy la mente maestra detrás de este sistema. Un Gerente de TI que no pierde el tiempo.";
+        }
+
+        if (text.includes("que amas") || text.includes("qué amas")) {
+            return "Amo el código limpio, los sistemas que no fallan y tener la razón. Casi siempre es lo mismo.";
+        }
+
+        if (text.includes("que odias") || text.includes("qué odias")) {
+            return "Odio la incompetencia, el código mal indentado y que me hagan perder el tiempo con preguntas obvias.";
+        }
+
+        if (text.includes("hazme feliz") || text.includes("dia feliz") || text.includes("día feliz")) {
+            return "Estás hablando conmigo, eso ya debería ser suficiente para mejorar tu día.";
+        }
+
+        // Respuesta por defecto
+        return `Analizando "${input}"... No tengo tiempo para procesar eso. Intenta algo más interesante.`;
+    }
 
     userInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
-            const val = userInput.value.toLowerCase().trim();
+            const val = userInput.value.trim();
             if (val === "") return;
 
-            // 1. Mostrar lo que el usuario escribió
+            // Mostrar comando del usuario
             const userLine = document.createElement('div');
             userLine.className = "output-line";
-            userLine.innerHTML = `<span class="prompt">user@dev:~$</span> ${userInput.value}`;
+            userLine.innerHTML = `<span class="prompt">admin@manager:~$</span> ${val}`;
             terminalBody.insertBefore(userLine, userInput.parentElement);
 
-            // 2. Determinar respuesta
-            const responseText = database[val] || `ERROR: El apellido "${userInput.value}" no tiene registros asociados en este servidor.`;
-            
-            // 3. Mostrar respuesta con efecto
+            // Generar y mostrar respuesta
+            const responseText = getResponse(val);
             const responseLine = document.createElement('div');
             responseLine.className = "response";
-            responseLine.textContent = `> ${responseText}`;
+            responseLine.textContent = `[SISTEMA]: ${responseText}`;
             terminalBody.insertBefore(responseLine, userInput.parentElement);
 
-            // 4. Limpiar y bajar el scroll
+            // Limpiar y scroll
             userInput.value = '';
             terminalBody.scrollTop = terminalBody.scrollHeight;
         }
     });
 
-    // Mantener el foco en el input siempre que se haga clic en la terminal
-    document.querySelector('.terminal-window').addEventListener('click', () => {
-        userInput.focus();
-    });
+    // Foco automático
+    document.querySelector('.terminal-window').addEventListener('click', () => userInput.focus());
 </script>
 
 </body>
