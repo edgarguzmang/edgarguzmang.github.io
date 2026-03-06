@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALERTA DE SISTEMA</title>
+    <title>SISTEMA SECUESTRADO</title>
     <style>
-        * { cursor: crosshair; }
+        * { cursor: none; } /* Esconde el mouse para desesperar más */
         body, html {
             background-color: #000;
             margin: 0; padding: 0;
@@ -16,31 +16,11 @@
             color: #ff0000;
         }
 
-        /* CAPA INICIAL PARA FORZAR EL PERMISO DEL NAVEGADOR */
-        #bloqueo {
+        /* LLUVIA DE CÓDIGO DE FONDO */
+        #matrix-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 9999;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            text-align: center;
-        }
-
-        .btn-hacking {
-            padding: 20px 40px;
-            border: 2px solid #ff0000;
-            background: transparent;
-            color: #ff0000;
-            font-size: 2rem;
-            font-family: inherit;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 0 15px #ff0000;
-        }
-
-        .btn-hacking:hover {
-            background: #ff0000;
-            color: #000;
+            color: rgba(255, 0, 0, 0.2); font-size: 10px;
+            overflow: hidden; z-index: -1; line-height: 1;
         }
 
         .fullscreen-bg {
@@ -48,17 +28,24 @@
             transform: translate(-50%, -50%);
             width: 100vw; text-align: center;
             color: rgba(255, 0, 0, 0.15);
-            font-size: 15vw; font-weight: 900;
+            font-size: 12vw; font-weight: 900;
             z-index: 0; pointer-events: none;
             text-transform: uppercase;
             animation: glitch 0.1s infinite;
-            display: none;
         }
 
         @keyframes glitch {
-            0% { transform: translate(-50%, -50%) skew(5deg); opacity: 0.2; }
-            50% { transform: translate(-52%, -48%) skew(-5deg); opacity: 0.5; }
+            0% { transform: translate(-50%, -50%) skew(2deg); opacity: 0.2; }
+            50% { transform: translate(-51%, -49%) skew(-2deg); opacity: 0.4; }
             100% { transform: translate(-50%, -50%) skew(0deg); opacity: 0.2; }
+        }
+
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 1000;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center; cursor: pointer;
         }
 
         .malicious-popup {
@@ -66,40 +53,72 @@
             background: #111; border: 3px solid #ff0000;
             box-shadow: 10px 10px 0px #600;
             color: #ff0000; z-index: 100;
+            animation: pop 0.1s ease-out;
         }
 
-        .popup-header { background: #ff0000; color: #000; padding: 5px; font-weight: 900; font-size: 10px; }
-        .popup-content { padding: 15px; text-align: center; font-size: 18px; font-weight: bold; }
+        @keyframes pop { from { transform: scale(0.5); } to { transform: scale(1); } }
+        .popup-header { background: #ff0000; color: #000; padding: 3px; font-weight: 900; font-size: 10px; }
+        .popup-content { padding: 15px; text-align: center; font-size: 18px; font-weight: bold; text-transform: uppercase; }
         .blink { animation: fastBlink 0.2s infinite; }
         @keyframes fastBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <div id="bloqueo">
-        <button class="btn-hacking blink" onclick="lanzarAtaque()">[ EJECUTAR REPARACIÓN ]</button>
-        <p style="margin-top: 20px; font-size: 0.9rem;">Se requiere interacción para restaurar protocolos de video.</p>
+    <div id="matrix-bg"></div>
+    <div id="overlay">
+        <h1 class="blink" style="font-size: 4rem;">SYSTEM BREACH</h1>
+        <p style="font-size: 1.2rem; color: #666;">CLIC PARA REPARAR SECTOR DE ARRANQUE</p>
     </div>
 
-    <div class="fullscreen-bg" id="bgText">COMEBACKKKKKKKKK</div>
+    <div class="fullscreen-bg">COMEBACKKKKKKKKK</div>
 
     <script>
-        const bgText = document.getElementById('bgText');
+        const overlay = document.getElementById('overlay');
+        const matrixBg = document.getElementById('matrix-bg');
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         const frases = [
-            "VOLVÍ.", "TE ENCONTRÉ.", "¿QUIÉN ES EL MEJOR?", 
-            "ESTA VEZ NO OCULTARÁS NADA.", "SIEMPRE HE ESTADO AQUÍ.",
-            "VIGILÁNDOTE.", "BORRANDO DATOS...", "SONRÍE A LA CÁMARA.",
-            "¿CREÍSTE QUE HABÍA TERMINADO?", "NI CON ESE PERFIL SABRÁS QUÉ SE VIENE.",
-            "ESTÁS EN MI MUNDO.", "SISTEMA COMPROMETIDO.", "NO PUEDES SALIR."
+            "VOLVÍ.", 
+            "ESTA VEZ NO OCULTARÁS NADA.", 
+            "¿QUIÉN ES EL MEJOR?", 
+            "TE ENCONTRÉ.", 
+            "SIEMPRE HE ESTADO AQUÍ.", 
+            "NI CON ESE PERFIL SABRÁS QUÉ SE VIENE.",
+            "VIGILÁNDOTE DESDE LA SOMBRA.",
+            "¿RECUERDAS ESTE ERROR?",
+            "BORRANDO SYSTEM32...",
+            "TU PRIVACIDAD ES UNA ILUSIÓN.",
+            "¿DE VERDAD CREÍSTE QUE HABÍA TERMINADO?",
+            "EL REY HA REGRESADO.",
+            "LOCALIZANDO COORDENADAS...",
+            "CÁMARA ACTIVADA. SONRÍE.",
+            "ESTÁS EN MI MUNDO AHORA.",
+            "NADIE TE VA A AYUDAR.",
+            "ERROR: HUMAN_RESISTANCE_DETECTED",
+            "ACCESO A TU CUENTA... EXITOSO.",
+            "NO CIERRES LOS OJOS.",
+            "¿ESCUCHAS ESO? SOY YO.",
+            "TODO TU CÓDIGO ME PERTENECE.",
+            "LA ESPERA TERMINÓ.",
+            "ESTA NOCHE NO DUERMES.",
+            "ESTOY DETRÁS DE TI.",
+            "¿QUIÉN TIENE EL CONTROL?"
         ];
 
-        function playSound() {
+        // Rellenar fondo con basura digital
+        setInterval(() => {
+            const line = document.createElement('div');
+            line.textContent = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            matrixBg.appendChild(line);
+            if (matrixBg.childNodes.length > 50) matrixBg.removeChild(matrixBg.firstChild);
+        }, 50);
+
+        function playAggressiveSound() {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(Math.random() * 400 + 100, audioCtx.currentTime);
+            osc.type = Math.random() > 0.5 ? 'sawtooth' : 'square';
+            osc.frequency.setValueAtTime(Math.random() * 600 + 50, audioCtx.currentTime);
             gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
             osc.connect(gain); gain.connect(audioCtx.destination);
             osc.start(); osc.stop(audioCtx.currentTime + 0.1);
@@ -110,39 +129,42 @@
             popup.className = 'malicious-popup';
             const x = Math.random() * (window.innerWidth - 350);
             const y = Math.random() * (window.innerHeight - 150);
-            popup.style.left = `${x}px`; popup.style.top = `${y}px`;
+            popup.style.left = `${x}px`;
+            popup.style.top = `${y}px`;
             
             const randomMsg = frases[Math.floor(Math.random() * frases.length)];
             popup.innerHTML = `
-                <div class="popup-header">SYS_ERROR_CRITICAL</div>
+                <div class="popup-header">CRITICAL_THREAT_ID_${Math.floor(Math.random()*999)}</div>
                 <div class="popup-content">${randomMsg}</div>
             `;
-            document.body.appendChild(popup);
-            playSound();
-            if (document.querySelectorAll('.malicious-popup').length > 25) document.querySelector('.malicious-popup').remove();
-        }
-
-        function lanzarAtaque() {
-            // ACTIVAR PANTALLA COMPLETA (Cross-browser)
-            const el = document.documentElement;
-            const rfs = el.requestFullscreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
             
-            if (rfs) {
-                rfs.call(el).then(() => {
-                    // Si entra en Fullscreen, quitamos el botón e iniciamos
-                    document.getElementById('bloqueo').style.display = 'none';
-                    bgText.style.display = 'block';
-                    if (audioCtx.state === 'suspended') audioCtx.resume();
-                    
-                    // Iniciar lluvia de popups
-                    setInterval(createPopup, 700);
-                    // Ocultar cursor
-                    document.body.style.cursor = 'none';
-                }).catch(err => {
-                    alert("Error al entrar en pantalla completa. Intenta de nuevo.");
-                });
+            document.body.appendChild(popup);
+            playAggressiveSound();
+            
+            if (document.querySelectorAll('.malicious-popup').length > 30) {
+                document.querySelector('.malicious-popup').remove();
             }
         }
+
+        overlay.addEventListener('click', () => {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            document.documentElement.requestFullscreen();
+            overlay.style.display = 'none';
+
+            // Ciclo de caos progresivo
+            let intervalTime = 1000;
+            const burst = () => {
+                createPopup();
+                if (intervalTime > 150) intervalTime -= 20;
+                setTimeout(burst, intervalTime);
+            };
+            burst();
+
+            // Pitidos de "corrupción" aleatorios
+            setInterval(() => {
+                if(Math.random() > 0.7) playAggressiveSound();
+            }, 200);
+        });
     </script>
 </body>
 </html>
