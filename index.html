@@ -3,195 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA COMPROMETIDO</title>
+    <title>Landing Page con Chat en Vivo</title>
     <style>
-        body, html {
-            background-color: #000;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            width: 100vw;
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #ff0000; /* Todo rojo de peligro */
-        }
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; margin: 0; }
+        
+        /* Contenedor del Chat */
+        #chat-window { width: 350px; height: 500px; background: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden; }
+        
+        #header { background: #007bff; color: white; padding: 15px; text-align: center; font-weight: bold; }
+        
+        #mensajes-log { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #fafafa; }
+        
+        .msg { padding: 8px 12px; border-radius: 15px; max-width: 80%; font-size: 14px; line-height: 1.4; }
+        .msg.otro { background: #e4e6eb; align-self: flex-start; }
+        .msg.mio { background: #007bff; color: white; align-self: flex-end; }
 
-        /* FONDO DINÁMICO COMEBACK */
-        .fullscreen-bg {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            text-align: center;
-            color: rgba(255, 0, 0, 0.05);
-            font-size: 12vw;
-            font-weight: 900;
-            z-index: 0;
-            pointer-events: none;
-            white-space: nowrap;
-            animation: glitchBg 0.1s infinite;
-        }
-
-        @keyframes glitchBg {
-            0% { transform: translate(-50%, -50%) skew(0deg); opacity: 0.1; }
-            50% { transform: translate(-50.5%, -49.5%) skew(2deg); opacity: 0.2; }
-            100% { transform: translate(-50%, -50%) skew(0deg); opacity: 0.1; }
-        }
-
-        /* CONTENEDOR DE LA TERMINAL DE ERROR */
-        .terminal-window {
-            position: relative;
-            z-index: 10;
-            width: 80%;
-            max-width: 800px;
-            background: rgba(10, 0, 0, 0.95);
-            border: 2px solid #ff0000;
-            box-shadow: 0 0 50px rgba(255, 0, 0, 0.6);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .terminal-header {
-            background: #ff0000;
-            color: #000;
-            padding: 5px 15px;
-            font-weight: bold;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .terminal-body {
-            padding: 20px;
-            height: 400px;
-            overflow-y: hidden;
-            font-size: 18px;
-            line-height: 1.4;
-            text-shadow: 0 0 5px #ff0000;
-        }
-
-        /* ESTILO DE LOS MENSAJES QUE APARECEN */
-        .msg-alert { color: #fff; font-weight: bold; background: #ff0000; display: inline-block; padding: 0 5px; margin-bottom: 5px; }
-        .msg-critical { color: #ff0000; margin-bottom: 8px; }
-
-        /* POPUPS MALICIOSOS MEJORADOS */
-        .malicious-popup {
-            position: fixed;
-            width: 350px;
-            background: #000;
-            border: 3px solid #ff0000;
-            box-shadow: 15px 15px 0px rgba(255, 0, 0, 0.3);
-            color: #ff0000;
-            z-index: 100;
-            padding: 0;
-            animation: popupIn 0.2s ease-out;
-        }
-
-        @keyframes popupIn {
-            from { transform: scale(0.8) rotate(5deg); opacity: 0; }
-            to { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-
-        .popup-header { background: #ff0000; color: #000; padding: 4px; font-weight: bold; text-align: center; }
-        .popup-content { padding: 20px; text-align: center; font-size: 20px; font-weight: 900; text-transform: uppercase; }
-
-        .blink { animation: fastBlink 0.3s infinite; }
-        @keyframes fastBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
+        #input-area { display: flex; padding: 10px; border-top: 1px solid #eee; }
+        #input-mensaje { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 8px 15px; outline: none; }
+        #btn-enviar { background: #007bff; border: none; color: white; margin-left: 10px; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="fullscreen-bg">COMEBACKKKKKKKKK</div>
-
-    <div class="terminal-window" id="terminal">
-        <div class="terminal-header">
-            <span>SISTEMA SECUESTRADO - ACCESO TOTAL</span>
-            <span>X</span>
-        </div>
-        <div class="terminal-body" id="logBody">
-            <div class="msg-alert">INYECCIÓN DE CÓDIGO COMPLETADA</div><br>
-            <div class="msg-critical">> Analizando perfil del usuario... [OK]</div>
-            <div class="msg-critical">> ¿QUIÉN ES EL MEJOR? ... [BUSCANDO]</div>
-        </div>
+<div id="chat-window">
+    <div id="header">Chat en Vivo 🚀</div>
+    <div id="mensajes-log"></div>
+    <div id="input-area">
+        <input type="text" id="input-mensaje" placeholder="Escribe un mensaje...">
+        <button id="btn-enviar">></button>
     </div>
+</div>
 
-    <script>
-        const logBody = document.getElementById('logBody');
+<script type="module">
+    // 1. Importar Firebase desde CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // 2. CONFIGURA TUS CREDENCIALES AQUÍ (Sustituye esto)
+    const firebaseConfig = {
+        apiKey: "TU_API_KEY",
+        authDomain: "tu-proyecto.firebaseapp.com",
+        projectId: "tu-proyecto-id",
+        storageBucket: "tu-proyecto.appspot.com",
+        messagingSenderId: "123456789",
+        appId: "1:123456789:web:abcdefgh"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const chatsRef = collection(db, "mensajes_chat");
+
+    // 3. Generar un ID simple para diferenciar "mis" mensajes de "otros"
+    const miID = "user_" + Math.floor(Math.random() * 1000);
+
+    const inputMsg = document.getElementById('input-mensaje');
+    const btnEnviar = document.getElementById('btn-enviar');
+    const log = document.getElementById('mensajes-log');
+
+    // 4. Función para ENVIAR mensajes
+    const enviar = async () => {
+        if (inputMsg.value.trim() === "") return;
         
-        const frasesAtaque = [
-            "VOLVÍ.",
-            "ESTA VEZ NO OCULTARÁS NADA.",
-            "¿QUIÉN ES EL MEJOR?",
-            "NI CON ESE PERFIL SABRÁS QUÉ SE VIENE.",
-            "SIEMPRE HE ESTADO AQUÍ.",
-            "TE ENCONTRÉ.",
-            "NO TIENES ESCAPATORIA.",
-            "ACCEDIENDO A ARCHIVOS PRIVADOS...",
-            "BORRANDO RASTROS DE SEGURIDAD...",
-            "EL SISTEMA ME PERTENECE."
-        ];
+        try {
+            await addDoc(chatsRef, {
+                texto: inputMsg.value,
+                usuarioID: miID,
+                fecha: serverTimestamp()
+            });
+            inputMsg.value = "";
+        } catch (e) { console.error("Error al enviar: ", e); }
+    };
 
-        // Función para escribir mensajes en la terminal central
-        function addLogEntry(text, isCritical = false) {
+    btnEnviar.onclick = enviar;
+    inputMsg.onkeypress = (e) => { if(e.key === 'Enter') enviar(); };
+
+    // 5. Función para ESCUCHAR mensajes en tiempo real
+    const q = query(chatsRef, orderBy("fecha", "asc"));
+    
+    onSnapshot(q, (snapshot) => {
+        log.innerHTML = ''; // Limpiar antes de repintar
+        snapshot.forEach((doc) => {
+            const data = doc.data();
             const div = document.createElement('div');
-            div.className = isCritical ? 'msg-critical' : 'msg-alert';
-            div.innerHTML = `> ${text}`;
-            logBody.appendChild(div);
-            if (logBody.childNodes.length > 15) logBody.removeChild(logBody.firstChild);
-        }
-
-        // Crear popups en posiciones aleatorias
-        function spawnPopup() {
-            const phrase = frasesAtaque[Math.floor(Math.random() * frasesAtaque.length)];
-            const popup = document.createElement('div');
-            popup.className = 'malicious-popup';
             
-            const x = Math.random() * (window.innerWidth - 350);
-            const y = Math.random() * (window.innerHeight - 200);
+            // Si el ID coincide, es "mio" (azul), si no es "otro" (gris)
+            div.classList.add('msg');
+            div.classList.add(data.usuarioID === miID ? 'mio' : 'otro');
+            div.textContent = data.texto;
             
-            popup.style.left = `${x}px`;
-            popup.style.top = `${y}px`;
-            
-            popup.innerHTML = `
-                <div class="popup-header">ERROR_CRÍTICO</div>
-                <div class="popup-content ${Math.random() > 0.5 ? 'blink' : ''}">
-                    ${phrase}
-                </div>
-            `;
-            
-            document.body.appendChild(popup);
-            addLogEntry(phrase, true);
+            log.appendChild(div);
+        });
+        // Auto-scroll al último mensaje
+        log.scrollTop = log.scrollHeight;
+    });
 
-            // Eliminar popups viejos para no saturar la memoria si se deja mucho tiempo
-            if (document.querySelectorAll('.malicious-popup').length > 15) {
-                document.querySelector('.malicious-popup').remove();
-            }
-        }
+</script>
 
-        // Secuencia de inicio
-        setTimeout(() => {
-            // Empieza lento y acelera
-            let speed = 1500;
-            const sequence = () => {
-                spawnPopup();
-                if (speed > 200) speed -= 100; // Se vuelve más frenético
-                setTimeout(sequence, speed);
-            };
-            sequence();
-        }, 1000);
-
-        // Efecto de ruido en la terminal
-        setInterval(() => {
-            const terminal = document.getElementById('terminal');
-            terminal.style.transform = `translate(${Math.random()*4-2}px, ${Math.random()*4-2}px)`;
-        }, 50);
-
-    </script>
 </body>
 </html>
