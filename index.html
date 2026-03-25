@@ -8,22 +8,9 @@
     <style>
         body { background: #0f172a; margin: 0; }
         .glass-card { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); }
-        .msg { word-wrap: break-word; transition: all 0.3s ease; }
-        /* Tus mensajes (Derecha - Dark) */
-        .msg-derecha { 
-            background: #1e293b; 
-            color: #f8fafc; 
-            align-self: flex-end; 
-            border-bottom-right-radius: 4px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
-        }
-        /* Mensajes recibidos (Izquierda - Gris) */
-        .msg-izquierda { 
-            background: #e2e8f0; 
-            color: #1e293b; 
-            align-self: flex-start; 
-            border-bottom-left-radius: 4px; 
-        }
+        .msg { word-wrap: break-word; }
+        .msg-derecha { background: #1e293b; color: #f8fafc; align-self: flex-end; border-bottom-right-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .msg-izquierda { background: #e2e8f0; color: #1e293b; align-self: flex-start; border-bottom-left-radius: 4px; }
         #chat-log::-webkit-scrollbar { width: 5px; }
         #chat-log::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .fade-in { animation: fadeIn 0.3s ease-out; }
@@ -42,7 +29,7 @@
                 <div>
                     <h2 class="text-white font-bold text-sm">Asesoría Familiar Edgar</h2>
                     <p class="text-slate-400 text-[10px] flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> En línea ahora
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> En línea
                     </p>
                 </div>
             </div>
@@ -50,7 +37,7 @@
         </div>
 
         <div id="chat-log" class="flex-1 p-4 overflow-y-auto flex flex-col gap-4 bg-[#f8fafc]">
-            <div id="loading-status" class="text-center text-[10px] text-slate-400 my-4 uppercase tracking-widest font-bold">Conectando chat privado...</div>
+            <div id="loading-status" class="text-center text-[10px] text-slate-400 my-4 uppercase tracking-widest">Conectando...</div>
         </div>
 
         <div class="p-4 bg-white border-t border-slate-100">
@@ -60,7 +47,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
                 </button>
             </div>
-            <p class="text-[9px] text-center text-slate-400 mt-4 font-medium opacity-60">SISTEMA DE PREVISIÓN FUNERARIA</p>
+            <p class="text-[9px] text-center text-slate-400 mt-4 font-medium opacity-60 uppercase">Servicios de Previsión</p>
         </div>
     </div>
 
@@ -84,63 +71,76 @@
         const chatIdFromURL = urlParams.get('id');
         const isAdmin = !!chatIdFromURL;
 
-        let chatId = chatIdFromURL || sessionStorage.getItem('active_chat_id') || "FAM-" + Math.random().toString(36).substr(2, 5).toUpperCase();
-        if (!isAdmin) sessionStorage.setItem('active_chat_id', chatId);
+        // Generar o recuperar ID
+        let chatId = chatIdFromURL || sessionStorage.getItem('active_chat_id');
+        if (!chatId) {
+            chatId = "FAM-" + Math.random().toString(36).substr(2, 5).toUpperCase();
+            sessionStorage.setItem('active_chat_id', chatId);
+        }
         document.getElementById('display-id').innerText = chatId;
 
         const log = document.getElementById('chat-log');
         const input = document.getElementById('input-msg');
         const btn = document.getElementById('btn-send');
 
+        // FUNCIÓN ENVIAR MEJORADA
         const sendMessage = async () => {
             const val = input.value.trim();
             if (!val) return;
+
+            // Verificar si es el primer mensaje antes de enviar para no abrir WA siempre
             const esPrimerMensaje = log.querySelectorAll('.msg').length === 0 && !isAdmin;
+            const textoTemp = val; // Guardamos el texto
+            input.value = ""; // Limpiamos rápido para UX
+
             try {
+                // 1. Guardar en Firebase
                 await addDoc(collection(db, "mensajes_privados"), {
                     chatId: chatId,
-                    texto: val,
+                    texto: textoTemp,
                     remitente: isAdmin ? "admin" : "cliente",
                     fecha: serverTimestamp()
                 });
+
+                // 2. Si es el primero del cliente, avisamos por WhatsApp
                 if (esPrimerMensaje) {
                     const baseUrl = window.location.origin + window.location.pathname;
                     const linkAdmin = `${baseUrl}?id=${chatId}`;
-                    const msgWA = `📍 NUEVO CLIENTE (ID: ${chatId})\nDice: "${val}"\n\nResponder aquí:\n${linkAdmin}`;
+                    const msgWA = `📍 NUEVO CLIENTE (ID: ${chatId})\nDice: "${textoTemp}"\n\nResponder aquí:\n${linkAdmin}`;
                     window.open(`https://wa.me/528712695349?text=${encodeURIComponent(msgWA)}`, '_blank');
                 }
-            } catch (e) { console.error("Error al enviar:", e); }
-            input.value = "";
+            } catch (e) { 
+                console.error("Error:", e);
+                input.value = textoTemp; // Si falla, devolvemos el texto al input
+            }
         };
 
         btn.onclick = sendMessage;
         input.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
 
-        // --- ESCUCHA EN TIEMPO REAL (Instalado con tus Índices) ---
+        // ESCUCHA EN TIEMPO REAL CON FORZADO DE METADATOS
         const q = query(collection(db, "mensajes_privados"), where("chatId", "==", chatId), orderBy("fecha", "asc"));
         
         onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
-            const statusLabel = document.getElementById('loading-status');
-            if (statusLabel) statusLabel.style.display = 'none';
+            if (document.getElementById('loading-status')) {
+                document.getElementById('loading-status').style.display = 'none';
+            }
             
             log.innerHTML = '';
-            
             snapshot.forEach(doc => {
                 const data = doc.data();
-                // Omitir mensajes temporales sin fecha mientras suben al server
-                if (snapshot.metadata.hasPendingWrites && !data.fecha) { return; }
-
+                
+                // Mostrar mensaje aunque la fecha sea nula (proceso de servidor)
                 const div = document.createElement('div');
-                // Lógica de burbujas: Mis mensajes a la derecha, los del otro a la izquierda
                 let soyYo = (isAdmin && data.remitente === 'admin') || (!isAdmin && data.remitente === 'cliente');
-
+                
                 div.className = `msg p-4 rounded-2xl text-sm max-w-[85%] fade-in shadow-sm ${soyYo ? 'msg-derecha' : 'msg-izquierda'}`;
                 div.innerText = data.texto || "";
                 log.appendChild(div);
             });
             log.scrollTop = log.scrollHeight;
         }, (error) => {
-            console.error("Error en tiempo real:", error);
+            console.error("Error Firestore:", error);
         });
     </script>
 </body>
