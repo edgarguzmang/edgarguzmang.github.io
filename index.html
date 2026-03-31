@@ -3,205 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xbox 360 Metro UI Pro</title>
+    <title>Xbox 360 Metro Ultimate Edition</title>
     <style>
         :root {
-            --bg-dark: #2b2b2b;
             --xbox-green: #107c10;
-            --text-gray: #a0a0a0;
-            --tile-bg: #444;
+            --bg-dark: #111;
+            --transition-speed: 0.4s;
         }
 
         body, html {
-            margin: 0; padding: 0; min-height: 100vh;
-            background: radial-gradient(circle at center, #404040 0%, #1a1a1a 100%);
-            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-            color: white; overflow-x: hidden;
+            margin: 0; padding: 0; height: 100%;
+            background: radial-gradient(circle at center, #333 0%, #050505 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+            color: white; overflow: hidden;
         }
 
-        /* Contenedor Principal Centrado */
+        /* DASHBOARD PRINCIPAL */
         .dashboard {
-            display: flex; flex-direction: column;
+            height: 100vh; display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            min-height: 100vh; padding: 20px; box-sizing: border-box;
+            transition: background 0.5s;
         }
 
-        /* Menú Superior */
+        /* NAVEGACIÓN SUPERIOR */
         .top-nav {
-            display: flex; gap: 25px; margin-bottom: 30px;
-            flex-wrap: wrap; justify-content: center;
+            display: flex; gap: 30px; margin-bottom: 30px; z-index: 100;
         }
 
         .nav-item {
-            color: var(--text-gray); font-size: clamp(18px, 4vw, 24px);
-            cursor: pointer; font-weight: 300; transition: 0.2s;
+            font-size: 24px; color: #666; cursor: pointer;
+            transition: 0.3s; font-weight: 300; text-transform: lowercase;
         }
 
-        .nav-item.active { color: white; font-weight: bold; border-bottom: 3px solid white; }
-
-        /* Layout: Tiles + Avatar */
-        .main-layout {
-            display: flex; align-items: flex-start; gap: 30px;
-            max-width: 1100px; width: 100%; justify-content: center;
+        .nav-item.active {
+            color: white; font-weight: bold; transform: scale(1.1);
+            border-bottom: 3px solid white;
         }
 
-        /* Grid de los cuadros */
-        .grid-container {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: 150px; gap: 12px; flex-grow: 1;
+        /* ESCENARIO DE MOVIMIENTO */
+        .main-stage {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; max-width: 1300px; position: relative;
         }
 
-        /* Avatar Section */
-        .avatar-aside {
-            width: 220px; text-align: center;
-            animation: slideLeft 0.8s ease-out;
+        /* VENTANA DE RECORTE (VIEWPORT) */
+        .viewport {
+            width: 900px; height: 400px; overflow: hidden; position: relative;
         }
 
-        .avatar-img {
-            width: 100%; max-width: 200px;
-            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
+        .grid-wrapper {
+            display: flex; position: absolute; left: 0;
+            transition: transform var(--transition-speed) cubic-bezier(0.18, 0.89, 0.32, 1.1);
         }
 
-        .gamertag-card {
-            background: rgba(255,255,255,0.05); padding: 15px;
-            border-left: 4px solid var(--xbox-green); margin-top: 10px;
+        .grid-page {
+            display: grid; grid-template-columns: repeat(4, 200px);
+            grid-template-rows: repeat(2, 180px);
+            gap: 15px; width: 900px; padding-right: 50px;
         }
 
-        /* Tiles Estilo Metro */
+        /* TILES (CUADROS) */
         .tile {
-            background: var(--tile-bg); position: relative; overflow: hidden;
-            border: 3px solid transparent; transition: 0.15s; cursor: pointer;
+            background: #222; border: 4px solid transparent;
+            position: relative; transition: 0.2s; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
 
-        .tile:hover { border-color: white; transform: scale(1.03); z-index: 10; }
+        .tile:hover, .tile.selected {
+            border-color: white; transform: scale(1.05); z-index: 10;
+        }
+
         .tile img { width: 100%; height: 100%; object-fit: cover; }
-        .tile-label { position: absolute; bottom: 10px; left: 12px; font-weight: bold; font-size: 14px; }
         .tile-large { grid-column: span 2; grid-row: span 2; }
         .bg-green { background-color: var(--xbox-green); }
+        .tile-label { 
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.7); padding: 8px; font-size: 13px;
+        }
 
-        /* PANTALLA DE CONFIGURACIÓN (MODAL) */
-        .settings-overlay {
+        /* AVATAR FIJO */
+        .avatar-area {
+            width: 250px; display: flex; flex-direction: column; align-items: center;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .avatar-img { 
+            width: 100%; filter: drop-shadow(0 20px 30px black);
+            transform: perspective(500px) rotateY(-10deg);
+        }
+
+        .gamertag-tag {
+            background: rgba(255,255,255,0.05); padding: 15px; width: 100%;
+            border-left: 5px solid var(--xbox-green); margin-top: -20px;
+        }
+
+        /* PANTALLA DE CONFIGURACIÓN */
+        .full-screen-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #1a1a1a; z-index: 1000;
-            display: none; flex-direction: column; padding: 50px; box-sizing: border-box;
-            animation: zoomIn 0.3s ease-out;
-        }
-
-        .settings-header { font-size: 48px; margin-bottom: 40px; font-weight: 100; border-bottom: 1px solid #444; }
-        
-        .settings-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;
-        }
-
-        .setting-item {
-            padding: 20px; background: #333; border: 2px solid transparent; cursor: pointer;
-        }
-        .setting-item:hover { background: var(--xbox-green); border-color: white; }
-
-        .btn-close {
-            position: absolute; top: 30px; right: 50px;
-            background: none; border: 2px solid white; color: white;
-            padding: 10px 20px; cursor: pointer; border-radius: 20px;
+            background: #111; z-index: 200; display: none;
+            flex-direction: column; padding: 5vw; box-sizing: border-box;
         }
 
         /* RESPONSIVO */
-        @media (max-width: 900px) {
-            .main-layout { flex-direction: column; align-items: center; }
-            .grid-container { grid-template-columns: repeat(2, 1fr); width: 100%; }
-            .avatar-aside { order: -1; width: 150px; }
+        @media (max-width: 1000px) {
+            .main-stage { flex-direction: column; }
+            .viewport { width: 95vw; height: auto; overflow: visible; }
+            .grid-page { grid-template-columns: repeat(2, 1fr); width: 95vw; }
+            .avatar-area { order: -1; width: 150px; margin-bottom: 20px; }
             .tile-large { grid-row: span 1; }
         }
 
-        @keyframes slideLeft { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes zoomIn { from { transform: scale(1.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes fadeIn { from {opacity: 0} to {opacity: 1} }
     </style>
 </head>
 <body>
 
-    <div class="dashboard">
-        <nav class="top-nav">
-            <span class="nav-item">bing</span>
-            <span class="nav-item active">home</span>
-            <span class="nav-item">social</span>
-            <span class="nav-item">games</span>
-            <span class="nav-item" onclick="openSettings()">settings</span>
+    <div class="dashboard" id="db">
+        <nav class="top-nav" id="topNav">
+            <span class="nav-item active" data-page="0">home</span>
+            <span class="nav-item" data-page="1">social</span>
+            <span class="nav-item" data-page="2">games</span>
+            <span class="nav-item" onclick="toggleSettings(true)">settings</span>
         </nav>
 
-        <div class="main-layout">
-            <div class="grid-container">
-                <div class="tile">
-                    <img src="https://media.redadn.es/imagenes/fifa-13_150821.jpg">
-                    <div class="tile-label">Play FIFA Soccer 13</div>
-                </div>
+        <div class="main-stage">
+            <div class="viewport">
+                <div class="grid-wrapper" id="wrapper">
+                    
+                    <div class="grid-page">
+                        <div class="tile"><img src="https://media.redadn.es/imagenes/fifa-13_150821.jpg"><div class="tile-label">Fifa 13</div></div>
+                        <div class="tile tile-large"><img src="https://assets1.ignimgs.com/2012/09/05/halo-4-button-02jpg-046779.jpg"><div class="tile-label">Halo 4</div></div>
+                        <div class="tile bg-green"><div style="font-size:50px; text-align:center; margin-top:40px">📌</div><div class="tile-label">Mis Pins</div></div>
+                        <div class="tile bg-green"><div style="font-size:50px; text-align:center; margin-top:40px">🕒</div><div class="tile-label">Recientes</div></div>
+                        <div class="tile"><img src="https://m.media-amazon.com/images/M/MV5BMjA4NDg3NzYxMF5BMl5BanBnXkFtZTcwNjUxNjE3Nw@@._V1_.jpg"><div class="tile-label">Películas</div></div>
+                    </div>
 
-                <div class="tile tile-large">
-                    <img src="https://assets1.ignimgs.com/2012/09/05/halo-4-button-02jpg-046779.jpg">
-                    <div class="tile-label">Halo 4</div>
-                </div>
+                    <div class="grid-page">
+                        <div class="tile tile-large bg-green" style="padding:20px">
+                            <h2>Amigos Online</h2>
+                            <hr>
+                            <p>Ingrid - Jugando React</p>
+                            <p>Mario - Ausente</p>
+                        </div>
+                        <div class="tile bg-green"><div style="font-size:50px; text-align:center; margin-top:40px">✉️</div><div class="tile-label">Mensajes</div></div>
+                        <div class="tile"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"></div>
+                        <div class="tile bg-green"><div style="font-size:50px; text-align:center; margin-top:40px">🏆</div><div class="tile-label">Logros</div></div>
+                    </div>
 
-                <div class="tile bg-green" onclick="openSettings()">
-                    <div style="display:flex; justify-content:center; align-items:center; height:100%; font-size:50px;">⚙️</div>
-                    <div class="tile-label">System Settings</div>
-                </div>
+                    <div class="grid-page" id="deptGrid">
+                        <div class="tile bg-green" style="padding:15px"><h3>Sistemas</h3><p>Activo</p></div>
+                        <div class="tile" style="background:#444; padding:15px"><h3>Ventas</h3><p>Inactivo</p></div>
+                        <div class="tile" style="background:#444; padding:15px"><h3>RH</h3><p>Activo</p></div>
+                        <div class="tile tile-large"><img src="https://m.media-amazon.com/images/I/81+q+1y6y1L._AC_SL1500_.jpg"></div>
+                    </div>
 
-                <div class="tile bg-green">
-                    <div style="display:flex; justify-content:center; align-items:center; height:100%; font-size:50px;">📌</div>
-                    <div class="tile-label">My Pins</div>
-                </div>
-
-                <div class="tile">
-                    <img src="https://i.scdn.co/image/ab67616d0000b27376043ef5871f308a0d0bc48f">
-                    <div class="tile-label">Music</div>
                 </div>
             </div>
 
-            <aside class="avatar-aside">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&clothingColor=107c10&mouth=smile" class="avatar-img" alt="Avatar">
-                <div class="gamertag-card">
-                    <div style="font-size: 22px; font-weight: bold;">Athena360</div>
-                    <div style="color: var(--xbox-green); font-weight: bold; letter-spacing: 1px;">2800 G</div>
+            <aside class="avatar-area">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&clothingColor=107c10&mouth=smile" class="avatar-img">
+                <div class="gamertag-tag">
+                    <div style="font-size: 24px; font-weight: bold;">Athena360</div>
+                    <div style="color: var(--xbox-green); font-weight: bold;">2800 G</div>
                 </div>
             </aside>
         </div>
     </div>
 
-    <div id="settingsScreen" class="settings-overlay">
-        <button class="btn-close" onclick="closeSettings()">Volver (B)</button>
-        <h1 class="settings-header">system settings</h1>
+    <div id="settingsOverlay" class="full-screen-overlay">
+        <h1 style="font-weight: 100; font-size: 60px; margin: 0;">configuración</h1>
+        <p style="color: #888; margin-bottom: 40px;">sistema de consola</p>
         
-        <div class="settings-grid">
-            <div class="setting-item">
-                <h3>Console Settings</h3>
-                <p>Display, Audio, Language</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+            <div class="tile" style="padding: 20px; height: 100px;" onclick="toggleSettings(false)">
+                <h3>Volver</h3>
+                <p>Presiona para salir</p>
             </div>
-            <div class="setting-item">
-                <h3>Network Settings</h3>
-                <p>Wi-Fi and Ethernet</p>
+            <div class="tile" style="padding: 20px; height: 100px;">
+                <h3>Perfil</h3>
+                <p>Edita tus datos</p>
             </div>
-            <div class="setting-item">
-                <h3>Storage</h3>
-                <p>Manage hard drives</p>
-            </div>
-            <div class="setting-item">
-                <h3>Account</h3>
-                <p>Privacy and Profile</p>
+            <div class="tile" style="padding: 20px; height: 100px;">
+                <h3>Red</h3>
+                <p>Conexión activa</p>
             </div>
         </div>
     </div>
 
     <script>
-        function openSettings() {
-            document.getElementById('settingsScreen').style.display = 'flex';
+        const wrapper = document.getElementById('wrapper');
+        const navItems = document.querySelectorAll('.nav-item');
+        let currentPage = 0;
+
+        // Función para cambiar de página con animación
+        function goToPage(pageIndex) {
+            currentPage = pageIndex;
+            const offset = pageIndex * 900; // Ancho de la página
+            wrapper.style.transform = `translateX(-${offset}px)`;
+
+            // Actualizar clases de navegación
+            navItems.forEach((item, index) => {
+                item.classList.toggle('active', index === pageIndex);
+            });
         }
 
-        function closeSettings() {
-            document.getElementById('settingsScreen').style.display = 'none';
-        }
-
-        // Cerrar con la tecla Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "Escape") closeSettings();
+        // Eventos de clic en el menú
+        navItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                if(item.innerText !== 'settings') goToPage(index);
+            });
         });
+
+        // Soporte para TECLADO (Flechas)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowRight" && currentPage < 2) {
+                goToPage(currentPage + 1);
+            } else if (e.key === "ArrowLeft" && currentPage > 0) {
+                goToPage(currentPage - 0);
+            }
+        });
+
+        // Mostrar/Ocultar Settings
+        function toggleSettings(show) {
+            const overlay = document.getElementById('settingsOverlay');
+            overlay.style.display = show ? 'flex' : 'none';
+        }
     </script>
 </body>
 </html>
