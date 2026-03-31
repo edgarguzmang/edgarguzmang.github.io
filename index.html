@@ -2,205 +2,182 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Xbox 360 NXE Retro</title>
+    <title>Xbox 360 Metro UI Dinámico</title>
     <style>
         :root {
-            --xbox-green: #94c11f;
-            --bg-gradient: radial-gradient(circle at 50% 40%, #ff8c00 0%, #7d3c00 100%);
+            --bg-dark: #2b2b2b;
+            --xbox-green: #107c10;
+            --hover-white: rgba(255, 255, 255, 0.9);
         }
 
         body, html {
             margin: 0; padding: 0; height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-gradient);
-            color: white;
-            overflow: hidden;
-        }
-
-        /* El fondo con círculos de la foto */
-        .nx-background {
-            position: absolute;
-            width: 100%; height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 20%),
-                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 30%);
-            z-index: 0;
+            background-color: var(--bg-dark);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: white; overflow: hidden;
         }
 
         .dashboard {
-            position: relative;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1;
-            perspective: 1500px;
+            padding: 40px 6%;
+            background: radial-gradient(circle at center, #404040 0%, #1a1a1a 100%);
+            display: flex; flex-direction: column;
         }
 
-        /* Texto superior "My Xbox" */
-        .menu-title {
-            position: absolute;
-            left: 10%;
-            top: 20%;
-            font-size: 42px;
-            font-weight: bold;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        /* Menú Superior */
+        .top-nav {
+            display: flex; gap: 35px; margin-bottom: 30px;
         }
 
-        .carousel {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            transform-style: preserve-3d;
-            margin-top: 50px;
+        .nav-item {
+            color: #888; font-size: 26px; text-decoration: none;
+            font-weight: 300; transition: 0.3s; cursor: pointer;
         }
 
-        .card {
-            position: absolute;
-            width: 350px;
-            height: 480px;
-            background: #fff;
-            border-radius: 5px;
-            transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-            cursor: pointer;
-            /* El reflejo de la foto */
-            -webkit-box-reflect: below 2px linear-gradient(transparent 80%, rgba(255,255,255,0.15));
+        .nav-item.active {
+            color: white; font-weight: bold; transform: scale(1.1);
         }
 
-        /* La tarjeta verde de perfil */
-        .card.profile {
-            background-color: var(--xbox-green);
-            color: white;
+        /* Contenedor de Secciones */
+        .content-section {
+            display: none; /* Oculto por defecto */
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 170px);
+            gap: 15px; width: 1000px;
+            animation: slideIn 0.4s ease-out;
         }
 
-        .card img {
-            width: 100%;
-            height: 85%;
-            object-fit: cover;
-            border-bottom: 5px solid #eee;
+        .content-section.active { display: grid; }
+
+        /* Estilo de los Cuadros (Tiles) */
+        .tile {
+            background: #444; position: relative; overflow: hidden;
+            border: 4px solid transparent; transition: 0.1s; cursor: pointer;
         }
 
-        .card-label {
-            padding: 15px;
-            color: #333;
-            font-weight: bold;
-            font-size: 18px;
+        .tile:hover {
+            border-color: white; transform: scale(1.02); z-index: 5;
         }
 
-        .profile .card-label { color: white; }
+        .tile img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* POSICIONAMIENTO TIPO NXE */
-        /* La activa está al frente */
-        .card.active {
-            transform: translateZ(200px) translateX(-100px);
-            z-index: 100;
-            border: 4px solid #fff;
+        .tile-label {
+            position: absolute; bottom: 10px; left: 12px;
+            font-size: 14px; font-weight: bold;
         }
 
-        /* Las de la derecha se van apilando hacia atrás con rotación */
-        .card.right-1 { transform: translateX(180px) translateZ(50px) rotateY(-30deg); z-index: 80; opacity: 0.9; }
-        .card.right-2 { transform: translateX(380px) translateZ(-50px) rotateY(-35deg); z-index: 60; opacity: 0.7; }
-        .card.right-3 { transform: translateX(550px) translateZ(-150px) rotateY(-40deg); z-index: 40; opacity: 0.5; }
+        .tile-large { grid-column: span 2; grid-row: span 2; }
+        .bg-green { background-color: var(--xbox-green); }
+        .bg-blue { background-color: #0078d7; }
 
-        /* Las de la izquierda */
-        .card.left-1 { transform: translateX(-450px) translateZ(50px) rotateY(30deg); z-index: 80; opacity: 0; }
-
-        .controls {
-            position: absolute;
-            bottom: 10%;
-            display: flex;
-            gap: 20px;
-        }
-
-        .btn-xbox {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid white;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 50px;
-            text-transform: uppercase;
-            font-size: 12px;
-            cursor: pointer;
+        @keyframes slideIn {
+            from { transform: translateX(50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <div class="nx-background"></div>
-
     <div class="dashboard">
-        <div class="menu-title">My Xbox</div>
+        <nav class="top-nav">
+            <span class="nav-item active" onclick="showSection('home', this)">home</span>
+            <span class="nav-item" onclick="showSection('social', this)">social</span>
+            <span class="nav-item" onclick="showSection('games', this)">games</span>
+            <span class="nav-item" onclick="showSection('settings', this)">settings</span>
+        </nav>
 
-        <div class="carousel" id="stage">
-            <div class="card active">
-                <img src="https://m.media-amazon.com/images/I/81S5u6vWfNL._AC_SL1500_.jpg" alt="">
-                <div class="card-label">Play LEGO® Indiana Jones™</div>
+        <div id="home" class="content-section active">
+            <div class="tile">
+                <img src="https://media.redadn.es/imagenes/fifa-13_150821.jpg">
+                <div class="tile-label">Play FIFA 13</div>
             </div>
+            <div class="tile tile-large">
+                <img src="https://assets1.ignimgs.com/2012/09/05/halo-4-button-02jpg-046779.jpg">
+                <div class="tile-label">Halo 4</div>
+            </div>
+            <div class="tile bg-green">
+                <div style="font-size: 50px; text-align:center; margin-top:30px">📌</div>
+                <div class="tile-label">My Pins</div>
+            </div>
+            <div class="tile bg-green">
+                <div style="font-size: 50px; text-align:center; margin-top:30px">🕒</div>
+                <div class="tile-label">Recent</div>
+            </div>
+            <div class="tile">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" style="padding:20px; box-sizing:border-box; background:white">
+            </div>
+        </div>
 
-            <div class="card profile right-1">
-                <div style="padding: 30px;">
-                    <h2 id="dept_nombre">SISTEMAS</h2>
-                    <p>Gamerscore: 2800 G</p>
-                    <hr style="opacity: 0.3">
-                    <p>Status: <b id="dept_estatus">Activo</b></p>
-                    <p>Padre: <span id="dept_padre">Dirección</span></p>
-                    <div style="font-size: 80px; margin-top: 50px; text-align: center;">👤</div>
+        <div id="social" class="content-section">
+            <div class="tile tile-large bg-blue">
+                <div style="padding:20px">
+                    <h2>Amigos Online</h2>
+                    <p>● Ingrid - Jugando Laravel</p>
+                    <p>● Mario - Ausente</p>
                 </div>
-                <div class="card-label" style="position:absolute; bottom:0;">Signed In</div>
             </div>
-
-            <div class="card right-2" style="background: #7dbd21;">
-                <div class="card-label" style="color:white">Game Library</div>
+            <div class="tile">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix">
+                <div class="tile-label">Perfil</div>
             </div>
-
-            <div class="card right-3" style="background: #00a4ef;">
-                <div class="card-label" style="color:white">Video Marketplace</div>
+            <div class="tile bg-green">
+                <div style="font-size: 50px; text-align:center; margin-top:30px">✉️</div>
+                <div class="tile-label">Mensajes</div>
+            </div>
+            <div class="tile">
+                <div style="font-size: 50px; text-align:center; margin-top:30px">🏆</div>
+                <div class="tile-label">Logros</div>
             </div>
         </div>
 
-        <div class="controls">
-            <button class="btn-xbox" onclick="move(-1)">LB</button>
-            <button class="btn-xbox" onclick="move(1)">RB</button>
+        <div id="settings" class="content-section">
+            <div class="tile bg-green">
+                <div style="font-size: 50px; text-align:center; margin-top:30px">⚙️</div>
+                <div class="tile-label">Sistema</div>
+            </div>
+            <div class="tile">
+                <div style="font-size: 50px; text-align:center; margin-top:30px">🌐</div>
+                <div class="tile-label">Red</div>
+            </div>
+            <div class="tile tile-large" style="background:#555">
+                <div style="padding:20px">
+                    <h2>Configuración de Cuenta</h2>
+                    <p>Gestiona tu suscripción y privacidad.</p>
+                </div>
+            </div>
         </div>
+
+        <div id="games" class="content-section">
+            <div class="tile tile-large bg-green">
+                <div style="padding:20px">
+                    <h1>SISTEMAS</h1>
+                    <p>Estatus: <b>ACTIVO</b></p>
+                    <p>Padre: Dirección General</p>
+                </div>
+            </div>
+            <div class="tile"><div class="tile-label">Ventas</div></div>
+            <div class="tile"><div class="tile-label">Recursos Humanos</div></div>
+            <div class="tile"><div class="tile-label">Contabilidad</div></div>
+        </div>
+
     </div>
 
     <script>
-        let index = 0;
-        const cards = document.querySelectorAll('.card');
-        const classes = ['left-1', 'active', 'right-1', 'right-2', 'right-3'];
-
-        function update() {
-            cards.forEach((card, i) => {
-                // Limpiar clases
-                classes.forEach(c => card.classList.remove(c));
-                
-                // Calcular posición relativa al índice actual
-                let pos = i - index;
-                
-                if (pos === 0) card.classList.add('active');
-                else if (pos === 1) card.classList.add('right-1');
-                else if (pos === 2) card.classList.add('right-2');
-                else if (pos >= 3) card.classList.add('right-3');
-                else if (pos === -1) card.classList.add('left-1');
-                else card.style.opacity = "0"; // Ocultar el resto
+        function showSection(sectionId, element) {
+            // 1. Quitar 'active' de todos los botones del menú
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('active');
             });
-        }
+            // 2. Poner 'active' al botón clickeado
+            element.classList.add('active');
 
-        function move(dir) {
-            index += dir;
-            if (index < 0) index = 0;
-            if (index > cards.length - 1) index = cards.length - 1;
-            update();
+            // 3. Ocultar todas las secciones de cuadros
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            // 4. Mostrar la sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
         }
-
-        // Teclas flechas
-        document.addEventListener('keydown', (e) => {
-            if(e.key === "ArrowRight") move(1);
-            if(e.key === "ArrowLeft") move(-1);
-        });
     </script>
 </body>
 </html>
