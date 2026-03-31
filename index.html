@@ -2,291 +2,205 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xbox 360 Dashboard Clone</title>
+    <title>Xbox 360 NXE Retro</title>
     <style>
-        /* CSS - ESTILOS */
         :root {
-            --orange-gradient: radial-gradient(circle at center, #ff8c00 0%, #8b4513 100%);
-            --green-gradient: radial-gradient(circle at center, #7dbd21 0%, #2e4d0a 100%);
-            --blue-gradient: radial-gradient(circle at center, #00a4ef 0%, #003450 100%);
+            --xbox-green: #94c11f;
+            --bg-gradient: radial-gradient(circle at 50% 40%, #ff8c00 0%, #7d3c00 100%);
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            overflow: hidden;
+            margin: 0; padding: 0; height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
             color: white;
+            overflow: hidden;
         }
 
-        /* Fondo dinámico */
+        /* El fondo con círculos de la foto */
+        .nx-background {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 30%);
+            z-index: 0;
+        }
+
         .dashboard {
-            background: var(--orange-gradient);
+            position: relative;
             height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            perspective: 1200px;
-            transition: background 0.8s ease;
+            align-items: center;
+            z-index: 1;
+            perspective: 1500px;
         }
 
-        /* Capa de círculos decorativos tipo NXE */
-        .bg-overlay {
+        /* Texto superior "My Xbox" */
+        .menu-title {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
+            left: 10%;
+            top: 20%;
+            font-size: 42px;
+            font-weight: bold;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
         }
 
-        /* Encabezado de Usuario */
-        .user-header {
-            position: absolute;
-            top: 40px;
-            right: 10%;
+        .carousel {
             display: flex;
             align-items: center;
-            gap: 15px;
-            text-align: right;
-        }
-
-        .gamertag-info h2 { margin: 0; font-size: 24px; font-weight: 400; }
-        .gamertag-info p { margin: 0; opacity: 0.8; font-size: 18px; }
-
-        .avatar-frame {
-            width: 60px;
-            height: 60px;
-            border: 3px solid white;
-            background: #444;
-            overflow: hidden;
-        }
-
-        /* Carrusel */
-        .carousel-container {
-            position: relative;
+            justify-content: center;
             width: 100%;
-            height: 450px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             transform-style: preserve-3d;
+            margin-top: 50px;
         }
 
         .card {
             position: absolute;
-            width: 320px;
-            height: 400px;
-            background: white;
-            border-radius: 4px;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            overflow: hidden;
+            width: 350px;
+            height: 480px;
+            background: #fff;
+            border-radius: 5px;
+            transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             cursor: pointer;
-            -webkit-box-reflect: below 10px linear-gradient(transparent 70%, rgba(255,255,255,0.1));
+            /* El reflejo de la foto */
+            -webkit-box-reflect: below 2px linear-gradient(transparent 80%, rgba(255,255,255,0.15));
         }
 
-        /* Estilo Tarjeta Verde (Perfil/Departamentos) */
-        .card-profile {
-            background-color: #94c11f;
-            display: flex;
-            flex-direction: column;
-            padding: 0;
+        /* La tarjeta verde de perfil */
+        .card.profile {
+            background-color: var(--xbox-green);
+            color: white;
         }
 
-        .profile-header {
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
+        .card img {
+            width: 100%;
+            height: 85%;
+            object-fit: cover;
+            border-bottom: 5px solid #eee;
         }
 
-        .profile-body {
-            padding: 20px;
-            flex-grow: 1;
+        .card-label {
+            padding: 15px;
+            color: #333;
+            font-weight: bold;
+            font-size: 18px;
         }
 
-        .status-badge {
-            display: inline-block;
-            padding: 5px 10px;
-            background: #444;
-            border-radius: 4px;
-            font-size: 12px;
-            margin-top: 10px;
-        }
+        .profile .card-label { color: white; }
 
-        /* Estados de animación */
+        /* POSICIONAMIENTO TIPO NXE */
+        /* La activa está al frente */
         .card.active {
-            transform: translateZ(150px) translateX(0);
-            z-index: 10;
-            border: 5px solid white;
-            opacity: 1;
+            transform: translateZ(200px) translateX(-100px);
+            z-index: 100;
+            border: 4px solid #fff;
         }
 
-        .card.left {
-            transform: translateX(-350px) rotateY(35deg) scale(0.8);
-            z-index: 5;
-            opacity: 0.6;
-        }
+        /* Las de la derecha se van apilando hacia atrás con rotación */
+        .card.right-1 { transform: translateX(180px) translateZ(50px) rotateY(-30deg); z-index: 80; opacity: 0.9; }
+        .card.right-2 { transform: translateX(380px) translateZ(-50px) rotateY(-35deg); z-index: 60; opacity: 0.7; }
+        .card.right-3 { transform: translateX(550px) translateZ(-150px) rotateY(-40deg); z-index: 40; opacity: 0.5; }
 
-        .card.right {
-            transform: translateX(350px) rotateY(-35deg) scale(0.8);
-            z-index: 5;
-            opacity: 0.6;
-        }
+        /* Las de la izquierda */
+        .card.left-1 { transform: translateX(-450px) translateZ(50px) rotateY(30deg); z-index: 80; opacity: 0; }
 
-        .card.hidden {
-            opacity: 0;
-            transform: translateZ(-200px) scale(0.5);
-            pointer-events: none;
-        }
-
-        /* Controles inferiores */
-        .footer-controls {
+        .controls {
             position: absolute;
-            bottom: 50px;
+            bottom: 10%;
             display: flex;
             gap: 20px;
         }
 
-        .btn {
+        .btn-xbox {
             background: rgba(255,255,255,0.2);
-            border: 2px solid white;
+            border: 1px solid white;
             color: white;
-            padding: 10px 25px;
-            border-radius: 20px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            font-size: 12px;
             cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .btn:hover { background: white; color: black; }
-
-        .theme-selector {
-            position: absolute;
-            bottom: 50px;
-            left: 50px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .dot {
-            width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <div class="dashboard" id="mainBg">
-        <div class="bg-overlay"></div>
+    <div class="nx-background"></div>
 
-        <header class="user-header">
-            <div class="gamertag-info">
-                <h2 id="displayTag">Athena360</h2>
-                <p>2800 G</p>
-            </div>
-            <div class="avatar-frame">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Athena" width="100%" alt="Avatar">
-            </div>
-        </header>
+    <div class="dashboard">
+        <div class="menu-title">My Xbox</div>
 
-        <div class="carousel-container">
-            
+        <div class="carousel" id="stage">
             <div class="card active">
-                <img src="https://m.media-amazon.com/images/I/81S5u6vWfNL._AC_SL1500_.jpg" alt="Game" style="width:100%; height:80%; object-fit:cover;">
-                <div style="padding:15px; color: #333; font-weight: bold;">LEGO Indiana Jones</div>
+                <img src="https://m.media-amazon.com/images/I/81S5u6vWfNL._AC_SL1500_.jpg" alt="">
+                <div class="card-label">Play LEGO® Indiana Jones™</div>
             </div>
 
-            <div class="card card-profile">
-                <div class="profile-header">
-                    <h3 style="margin:0">Mi Departamento</h3>
+            <div class="card profile right-1">
+                <div style="padding: 30px;">
+                    <h2 id="dept_nombre">SISTEMAS</h2>
+                    <p>Gamerscore: 2800 G</p>
+                    <hr style="opacity: 0.3">
+                    <p>Status: <b id="dept_estatus">Activo</b></p>
+                    <p>Padre: <span id="dept_padre">Dirección</span></p>
+                    <div style="font-size: 80px; margin-top: 50px; text-align: center;">👤</div>
                 </div>
-                <div class="profile-body">
-                    <h1 style="margin:0">Sistemas</h1>
-                    <p>Padre: Dirección General</p>
-                    <div class="status-badge">● ESTATUS: ACTIVO</div>
-                    
-                    <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 20px;">
-                        <small>Última conexión: Hoy</small>
-                    </div>
-                </div>
+                <div class="card-label" style="position:absolute; bottom:0;">Signed In</div>
             </div>
 
-            <div class="card" style="background: #222; display: flex; align-items: center; justify-content: center;">
-                <div style="text-align: center;">
-                    <span style="font-size: 50px;">🎬</span>
-                    <h3>Reproductor</h3>
-                </div>
+            <div class="card right-2" style="background: #7dbd21;">
+                <div class="card-label" style="color:white">Game Library</div>
             </div>
 
-            <div class="card" style="background: #444; display: flex; align-items: center; justify-content: center;">
-                <div style="text-align: center;">
-                    <span style="font-size: 50px;">⚙️</span>
-                    <h3>Configuración</h3>
-                </div>
+            <div class="card right-3" style="background: #00a4ef;">
+                <div class="card-label" style="color:white">Video Marketplace</div>
             </div>
-
         </div>
 
-        <div class="footer-controls">
-            <button class="btn" onclick="move(-1)"> ⬅ LB </button>
-            <button class="btn" onclick="move(1)"> RB ➡ </button>
-        </div>
-
-        <div class="theme-selector">
-            <div class="dot" style="background: orange;" onclick="changeTheme('orange')"></div>
-            <div class="dot" style="background: #7dbd21;" onclick="changeTheme('green')"></div>
-            <div class="dot" style="background: #00a4ef;" onclick="changeTheme('blue')"></div>
+        <div class="controls">
+            <button class="btn-xbox" onclick="move(-1)">LB</button>
+            <button class="btn-xbox" onclick="move(1)">RB</button>
         </div>
     </div>
 
     <script>
-        /* JAVASCRIPT - LÓGICA DE MOVIMIENTO */
-        let currentIndex = 0;
+        let index = 0;
         const cards = document.querySelectorAll('.card');
-        const mainBg = document.getElementById('mainBg');
+        const classes = ['left-1', 'active', 'right-1', 'right-2', 'right-3'];
 
-        function updateCarousel() {
+        function update() {
             cards.forEach((card, i) => {
-                card.classList.remove('active', 'left', 'right', 'hidden');
+                // Limpiar clases
+                classes.forEach(c => card.classList.remove(c));
                 
-                if (i === currentIndex) {
-                    card.classList.add('active');
-                } else if (i < currentIndex) {
-                    card.classList.add('left');
-                } else if (i > currentIndex) {
-                    card.classList.add('right');
-                }
+                // Calcular posición relativa al índice actual
+                let pos = i - index;
                 
-                // Ocultar las que estén muy lejos para mejorar rendimiento
-                if (Math.abs(i - currentIndex) > 1) {
-                    card.classList.add('hidden');
-                }
+                if (pos === 0) card.classList.add('active');
+                else if (pos === 1) card.classList.add('right-1');
+                else if (pos === 2) card.classList.add('right-2');
+                else if (pos >= 3) card.classList.add('right-3');
+                else if (pos === -1) card.classList.add('left-1');
+                else card.style.opacity = "0"; // Ocultar el resto
             });
         }
 
         function move(dir) {
-            currentIndex += dir;
-            // Loop o tope
-            if (currentIndex < 0) currentIndex = 0;
-            if (currentIndex >= cards.length) currentIndex = cards.length - 1;
-            updateCarousel();
+            index += dir;
+            if (index < 0) index = 0;
+            if (index > cards.length - 1) index = cards.length - 1;
+            update();
         }
 
-        function changeTheme(color) {
-            if(color === 'orange') mainBg.style.background = "var(--orange-gradient)";
-            if(color === 'green') mainBg.style.background = "var(--green-gradient)";
-            if(color === 'blue') mainBg.style.background = "var(--blue-gradient)";
-        }
-
-        // Permitir usar las flechas del teclado
+        // Teclas flechas
         document.addEventListener('keydown', (e) => {
-            if (e.key === "ArrowLeft") move(-1);
-            if (e.key === "ArrowRight") move(1);
+            if(e.key === "ArrowRight") move(1);
+            if(e.key === "ArrowLeft") move(-1);
         });
-
-        // Inicializar
-        updateCarousel();
     </script>
 </body>
 </html>
