@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Letter Wrap Art</title>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Caveat&family=Cedarville+Cursive&family=Indie+Flower&family=Nothing+You+Could+Do&family=Oooh+Baby&family=Reenie+Beanie&family=Shadows+Into+Light&display=swap');
+
+    body {
+      margin: 0;
+      background-color: #FFFDF3;
+    }
+
+    div {
+      padding: 0rem 5rem;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-items: center;
+      max-width: 900px;
+      min-height: 100vh;
+    }
+
+    p {
+      font-size: 4rem;
+      color: red;
+      line-height: 3.4rem;
+      word-break: break-word; /* Para asegurar que el texto fluya bien */
+    }
+
+    @media only screen and (max-width: 800px) {
+      p {
+        font-size: 3rem;
+        line-height: 2.55rem;
+      }
+      div {
+        padding: 0rem 2rem;
+      }
+    }
+
+    /* Clases de Fuentes */
+    .caveat { font-family: "Caveat", cursive; }
+    .shadows-into-light { font-family: "Shadows Into Light", cursive; }
+    .indie-flower { font-family: "Indie Flower", cursive; }
+    .nothing-you-could-do { font-family: "Nothing You Could Do", cursive; }
+    .oooh-baby { font-family: "Oooh Baby", cursive; }
+    .reenie-beanie { font-family: "Reenie Beanie", cursive; }
+    .cedarville-cursive { font-family: "Cedarville Cursive", cursive; }
+  </style>
+</head>
+<body>
+
+  <div>
+    <p id="target-text"></p>
+  </div>
+
+  <script>
+    const seed = 12;
+    const text = 'Life is full of small moments that shape who we are. Each day brings new chances to learn, connect, and grow. Even simple things like a quiet morning, a kind word, or a shared smile can leave a lasting mark. By paying attention to these moments, we find meaning in the ordinary.';
+
+    function seededRandom(s) {
+      let x = Math.sin(s) * 10000;
+      return x - Math.floor(x);
+    }
+
+    function wrapLetters(str, element, initialSeed = 1) {
+      const fonts = [
+        'caveat',
+        'cedarville-cursive',
+        'indie-flower',
+        'nothing-you-could-do',
+        'oooh-baby',
+        'reenie-beanie',
+        'shadows-into-light'
+      ];
+
+      const blacklist = {
+        l: ['cedarville-cursive', 'oooh-baby', 'nothing-you-could-do']
+      };
+
+      const lastUsed = {};
+      element.innerHTML = '';
+
+      let currentSeed = initialSeed;
+
+      for (const char of str) {
+        const lowerChar = char.toLowerCase();
+        let availableFonts = [...fonts];
+
+        // Filtro de lista negra
+        if (blacklist[lowerChar]) {
+          availableFonts = availableFonts.filter(f => !blacklist[lowerChar].includes(f));
+        }
+
+        // Evitar repetir la misma fuente consecutivamente para la misma letra
+        if (lastUsed[lowerChar]) {
+          availableFonts = availableFonts.filter(f => f !== lastUsed[lowerChar]);
+        }
+
+        const fontIndex = Math.floor(seededRandom(currentSeed) * availableFonts.length);
+        const font = availableFonts[fontIndex] || fonts[0];
+        
+        lastUsed[lowerChar] = font;
+
+        const span = document.createElement('span');
+        span.className = font;
+        span.textContent = char;
+        element.appendChild(span);
+
+        currentSeed++;
+      }
+    }
+
+    // Ejecución
+    const pElement = document.getElementById('target-text');
+    wrapLetters(text, pElement, seed);
+  </script>
+
+</body>
+</html>
