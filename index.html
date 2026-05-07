@@ -3,7 +3,7 @@
 <title>Data Nexus - Cyberpunk Visualization</title>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&display=swap');
-    
+
     * {
         margin: 0;
         padding: 0;
@@ -22,12 +22,11 @@
         width: 100%;
         height: 100%;
         background: linear-gradient(135deg,
-            #000506 0%,
-            #001122 25%,
-            #000814 50%,
-            #001a0a 75%,
-            #000208 100%
-        );
+                #000506 0%,
+                #001122 25%,
+                #000814 50%,
+                #001a0a 75%,
+                #000208 100%);
     }
 
     .grid-overlay {
@@ -38,7 +37,7 @@
         height: 100%;
         pointer-events: none;
         opacity: 0.04;
-        background-image: 
+        background-image:
             linear-gradient(rgba(0, 255, 136, 0.1) 1px, transparent 1px),
             linear-gradient(90deg, rgba(0, 255, 136, 0.1) 1px, transparent 1px);
         background-size: 50px 50px;
@@ -46,8 +45,13 @@
     }
 
     @keyframes gridShift {
-        0% { transform: translate(0, 0); }
-        100% { transform: translate(50px, 50px); }
+        0% {
+            transform: translate(0, 0);
+        }
+
+        100% {
+            transform: translate(50px, 50px);
+        }
     }
 
     .scan-line {
@@ -56,13 +60,13 @@
         left: 0;
         width: 100%;
         height: 6px;
-        background: linear-gradient(90deg, 
-            transparent 0%, 
-            #00ff88 40%,
-            #88ffaa 50%, 
-            #00ff88 60%,
-            transparent 100%);
-        box-shadow: 
+        background: linear-gradient(90deg,
+                transparent 0%,
+                #00ff88 40%,
+                #88ffaa 50%,
+                #00ff88 60%,
+                transparent 100%);
+        box-shadow:
             0 0 30px #00ff88,
             0 0 60px rgba(0, 255, 136, 0.6),
             0 0 100px rgba(0, 255, 136, 0.3);
@@ -70,9 +74,21 @@
     }
 
     @keyframes scanMove {
-        0%, 100% { top: 0%; opacity: 0; }
-        10%, 90% { opacity: 1; }
-        50% { top: 100%; }
+
+        0%,
+        100% {
+            top: 0%;
+            opacity: 0;
+        }
+
+        10%,
+        90% {
+            opacity: 1;
+        }
+
+        50% {
+            top: 100%;
+        }
     }
 
     .tech-pattern {
@@ -83,7 +99,7 @@
         height: 100%;
         pointer-events: none;
         opacity: 0.02;
-        background-image: 
+        background-image:
             radial-gradient(circle at 25% 25%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
             radial-gradient(circle at 75% 75%, rgba(0, 136, 255, 0.1) 0%, transparent 50%),
             radial-gradient(circle at 50% 50%, rgba(255, 0, 136, 0.05) 0%, transparent 70%);
@@ -91,8 +107,17 @@
     }
 
     @keyframes techPulse {
-        0%, 100% { opacity: 0.02; transform: scale(1); }
-        50% { opacity: 0.06; transform: scale(1.1); }
+
+        0%,
+        100% {
+            opacity: 0.02;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 0.06;
+            transform: scale(1.1);
+        }
     }
 
     .circuit-lines {
@@ -103,7 +128,7 @@
         height: 100%;
         pointer-events: none;
         opacity: 0.08;
-        background-image: 
+        background-image:
             linear-gradient(45deg, transparent 40%, rgba(0, 255, 136, 0.1) 41%, rgba(0, 255, 136, 0.1) 42%, transparent 43%),
             linear-gradient(-45deg, transparent 40%, rgba(0, 136, 255, 0.1) 41%, rgba(0, 136, 255, 0.1) 42%, transparent 43%);
         background-size: 200px 200px;
@@ -111,8 +136,13 @@
     }
 
     @keyframes circuitFlow {
-        0% { background-position: 0px 0px, 0px 0px; }
-        100% { background-position: 200px 200px, -200px 200px; }
+        0% {
+            background-position: 0px 0px, 0px 0px;
+        }
+
+        100% {
+            background-position: 200px 200px, -200px 200px;
+        }
     }
 
     #hud {
@@ -130,7 +160,7 @@
         border-radius: 20px;
         font-weight: 500;
         backdrop-filter: blur(30px);
-        box-shadow: 
+        box-shadow:
             0 0 20px rgba(0, 255, 136, 0.3),
             inset 0 1px 0 rgba(0, 255, 136, 0.2),
             inset 0 0 20px rgba(0, 255, 136, 0.1);
@@ -151,8 +181,15 @@
     }
 
     @keyframes borderGlow {
-        0%, 100% { opacity: 0.3; }
-        50% { opacity: 0.8; }
+
+        0%,
+        100% {
+            opacity: 0.3;
+        }
+
+        50% {
+            opacity: 0.8;
+        }
     }
 
     .hud-line {
@@ -177,8 +214,17 @@
     }
 
     @keyframes hudPulse {
-        0%, 100% { opacity: 0.3; box-shadow: 0 0 5px #00ff88; }
-        50% { opacity: 1; box-shadow: 0 0 15px #00ff88; }
+
+        0%,
+        100% {
+            opacity: 0.3;
+            box-shadow: 0 0 5px #00ff88;
+        }
+
+        50% {
+            opacity: 1;
+            box-shadow: 0 0 15px #00ff88;
+        }
     }
 
     .hud-value {
@@ -198,8 +244,19 @@
     }
 
     @keyframes statusPulse {
-        0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px #00ff88; }
-        50% { opacity: 0.5; transform: scale(1.3); box-shadow: 0 0 20px #00ff88; }
+
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        50% {
+            opacity: 0.5;
+            transform: scale(1.3);
+            box-shadow: 0 0 20px #00ff88;
+        }
     }
 
     #data-stream {
@@ -216,7 +273,7 @@
         transition: opacity 1s ease;
         z-index: 100;
         pointer-events: none;
-        text-shadow: 
+        text-shadow:
             0 0 20px #00ff88,
             0 0 40px #00ff88,
             0 0 60px #00ff88;
@@ -277,8 +334,13 @@
     }
 
     @keyframes controlSweep {
-        0% { left: -100%; }
-        100% { left: 100%; }
+        0% {
+            left: -100%;
+        }
+
+        100% {
+            left: 100%;
+        }
     }
 
     .cyber-switch {
@@ -318,8 +380,15 @@
     }
 
     @keyframes switchShimmer {
-        0%, 100% { transform: translateX(-100%); }
-        50% { transform: translateX(100%); }
+
+        0%,
+        100% {
+            transform: translateX(-100%);
+        }
+
+        50% {
+            transform: translateX(100%);
+        }
     }
 
     .cyber-switch.active::before {
@@ -347,7 +416,8 @@
         text-shadow: 0 0 10px rgba(136, 255, 170, 0.5);
     }
 
-    #execute-btn, #controls-toggle {
+    #execute-btn,
+    #controls-toggle {
         background: rgba(0, 0, 0, 0.7);
         border: 2px solid rgba(0, 255, 136, 0.3);
         color: #00ff88;
@@ -366,7 +436,8 @@
         box-shadow: inset 0 0 20px rgba(0, 255, 136, 0.1);
     }
 
-    #execute-btn::before, #controls-toggle::before {
+    #execute-btn::before,
+    #controls-toggle::before {
         content: '';
         position: absolute;
         top: 0;
@@ -377,14 +448,15 @@
         transition: left 0.5s ease;
     }
 
-    #execute-btn::after, #controls-toggle::after {
+    #execute-btn::after,
+    #controls-toggle::after {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: 
+        background:
             linear-gradient(45deg, transparent 48%, rgba(0, 255, 136, 0.1) 49%, rgba(0, 255, 136, 0.1) 51%, transparent 52%),
             linear-gradient(-45deg, transparent 48%, rgba(0, 255, 136, 0.1) 49%, rgba(0, 255, 136, 0.1) 51%, transparent 52%);
         background-size: 20px 20px;
@@ -394,27 +466,36 @@
     }
 
     @keyframes buttonPattern {
-        0% { background-position: 0px 0px, 0px 0px; }
-        100% { background-position: 20px 20px, -20px 20px; }
+        0% {
+            background-position: 0px 0px, 0px 0px;
+        }
+
+        100% {
+            background-position: 20px 20px, -20px 20px;
+        }
     }
 
-    #execute-btn:hover, #controls-toggle:hover {
+    #execute-btn:hover,
+    #controls-toggle:hover {
         background: rgba(0, 255, 136, 0.1);
-        box-shadow: 
+        box-shadow:
             0 0 20px rgba(0, 255, 136, 0.5),
             inset 0 0 20px rgba(0, 255, 136, 0.1);
         transform: scale(1.05);
     }
 
-    #execute-btn:hover::before, #controls-toggle:hover::before {
+    #execute-btn:hover::before,
+    #controls-toggle:hover::before {
         left: 100%;
     }
 
-    #execute-btn:hover::after, #controls-toggle:hover::after {
+    #execute-btn:hover::after,
+    #controls-toggle:hover::after {
         opacity: 1;
     }
 
-    #execute-btn:active, #controls-toggle:active {
+    #execute-btn:active,
+    #controls-toggle:active {
         transform: scale(0.98);
     }
 
@@ -428,11 +509,12 @@
         transition: all 0.3s ease;
     }
 
-    #execute-btn:hover .cyber-icon, #controls-toggle:hover .cyber-icon {
+    #execute-btn:hover .cyber-icon,
+    #controls-toggle:hover .cyber-icon {
         filter: drop-shadow(0 0 10px #00ff88);
         transform: scale(1.1);
     }
-    
+
     #controls-toggle {
         display: none;
     }
@@ -468,13 +550,28 @@
     }
 
     @keyframes perfPulse {
-        0%, 100% { opacity: 0.8; }
-        50% { opacity: 1; }
+
+        0%,
+        100% {
+            opacity: 0.8;
+        }
+
+        50% {
+            opacity: 1;
+        }
     }
 
-    .perf-bar.cpu::before { width: 75%; }
-    .perf-bar.gpu::before { width: 90%; }
-    .perf-bar.memory::before { width: 60%; }
+    .perf-bar.cpu::before {
+        width: 75%;
+    }
+
+    .perf-bar.gpu::before {
+        width: 90%;
+    }
+
+    .perf-bar.memory::before {
+        width: 60%;
+    }
 
     .perf-label {
         font-size: 10px;
@@ -500,11 +597,11 @@
             padding: 12px 24px;
             font-size: 12px;
         }
-        
+
         .control-section {
             display: none;
         }
-        
+
         #control-panel.expanded .control-section {
             display: grid;
             grid-template-columns: auto 1fr;
@@ -535,6 +632,92 @@
             width: 80px;
             height: 3px;
         }
+    }
+
+    /* --- ELEMENTO CENTRAL: EDGAR GUZMAN --- */
+    .hero-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 10;
+    }
+
+    .hero-name {
+        font-size: 5rem;
+        font-weight: 900;
+        letter-spacing: 15px;
+        color: #00ff88;
+        text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88;
+        margin-bottom: 20px;
+        animation: glitch 3s infinite;
+    }
+
+    @keyframes glitch {
+        0% {
+            transform: skew(0deg);
+        }
+
+        2% {
+            transform: skew(10deg);
+            opacity: 0.8;
+        }
+
+        4% {
+            transform: skew(-10deg);
+        }
+
+        6% {
+            transform: skew(0deg);
+        }
+    }
+
+    /* --- HUD Y BARRAS --- */
+    #hud {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        font-size: 14px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 15px 20px;
+        border: 1px solid rgba(0, 255, 136, 0.3);
+        border-radius: 20px;
+        backdrop-filter: blur(30px);
+        z-index: 100;
+    }
+
+    /* --- BOTÓN ESCUCHAR --- */
+    #btn-escuchar {
+        background: rgba(0, 255, 136, 0.1);
+        border: 2px solid #00ff88;
+        color: #00ff88;
+        padding: 15px 40px;
+        font-family: 'Orbitron';
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 50px;
+        transition: 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+    }
+
+    #btn-escuchar:hover {
+        background: #00ff88;
+        color: #000;
+        box-shadow: 0 0 30px #00ff88;
+    }
+
+    #control-panel {
+        position: fixed;
+        bottom: 30px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        z-index: 100;
     }
 
     @media (max-width: 480px) {
@@ -589,6 +772,11 @@
         <span class="hud-value" id="trail-display">ACTIVE</span>
     </div>
 </div>
+
+<div class="hero-container">
+    <h1 class="hero-name">EDGAR GUZMAN</h1>
+    <button id="btn-escuchar">ESCUCHAR A EDGAR</button>
+</div>
 <div class="performance-bars">
     <div class="perf-label">CPU LOAD</div>
     <div class="perf-bar cpu"></div>
@@ -622,14 +810,16 @@
         <span class="switch-label">TRAILS</span>
     </div>
 
-    <h2>EDGAR GUZMAN</h2>
+    <!-- <h2>EDGAR GUZMAN</h2> -->
     <button id="execute-btn">
         <svg class="cyber-icon" viewBox="0 0 24 24">
-            <polygon points="5,3 19,12 5,21"/>
+            <polygon points="5,3 19,12 5,21" />
         </svg>
         EXECUTE_NEXT
     </button>
 </div>
+
+<audio id="audio-drake" src="DRAKE.mp3"></audio>
 <script type="module">
     import * as THREE from 'three';
     import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -637,56 +827,75 @@
     import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
     import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    
+
     let scene, camera, renderer, dataNodes, trailSystem, backgroundNodes;
     let composer, controls;
     let time = 0;
     let currentVisualization = 0;
     let isTransforming = false;
     let transformProgress = 0;
-    
+
     let frameCount = 0;
     let lastTime = performance.now();
     let fps = 60;
-    
+
     let autoRotate = true;
     let dataFlow = true;
     let showTrails = true;
-    
+
     const nodeCount = 24000;
     const trailCount = 8000;
     const transformSpeed = 0.02;
     const visualizationNames = [
         "DATA STREAM",
-        "HOLOGRAPHIC NETWORK", 
+        "HOLOGRAPHIC NETWORK",
         "PULSAR CORE"
     ];
-    
+
+    const btnEscuchar = document.getElementById('btn-escuchar');
+    const audio = document.getElementById('audio-drake');
+    let playing = false;
+
+    btnEscuchar.addEventListener('click', () => {
+        if (!playing) {
+            audio.play();
+            btnEscuchar.innerText = "DETENER DATA";
+            btnEscuchar.style.borderColor = "#ff0088";
+            btnEscuchar.style.color = "#ff0088";
+        } else {
+            audio.pause();
+            btnEscuchar.innerText = "ESCUCHAR A EDGAR";
+            btnEscuchar.style.borderColor = "#00ff88";
+            btnEscuchar.style.color = "#00ff88";
+        }
+        playing = !playing;
+    });
+
     window.onload = initializeSystem;
-    
+
     function generateDataStream(i, count) {
         const t = i / count;
-        
+
         const channelCount = 10;
         const channelIndex = Math.floor(t * channelCount);
         const channelT = (t * channelCount) % 1;
-        
+
         const channelAngle = (channelIndex / channelCount) * Math.PI * 2;
         const channelRadius = 20 + channelIndex * 5;
-        
+
         const streamLength = 120;
         const packetPosition = channelT * streamLength - streamLength * 0.5;
-        
+
         const helixRadius = 2.5 + Math.sin(channelT * Math.PI * 4) * 1.5;
         const helixAngle = packetPosition * 0.15 + channelAngle;
 
         const x = Math.cos(helixAngle) * (channelRadius + helixRadius);
         const y = packetPosition;
         const z = Math.sin(helixAngle) * (channelRadius + helixRadius);
-        
+
         return new THREE.Vector3(x, y, z);
     }
-    
+
     function generateHolographicNetwork(i, count) {
         const layerCount = 8;
         const layerIndex = Math.floor(i / (count / layerCount));
@@ -696,8 +905,8 @@
         const layerHeight = (layerIndex - layerCount / 2) * 15;
         const layerRadius = 30 + Math.sin(layerIndex * 0.8) * 20;
         const angle = nodeInLayerT * Math.PI * 2;
-        
-        const yOffset = Math.sin(angle * (4 + layerIndex % 3)) * 4; 
+
+        const yOffset = Math.sin(angle * (4 + layerIndex % 3)) * 4;
 
         const x = Math.cos(angle) * layerRadius;
         const y = layerHeight + yOffset;
@@ -705,7 +914,7 @@
 
         return new THREE.Vector3(x, y, z);
     }
-    
+
     function generatePulsarCore(i, count) {
         const coreRatio = 0.3;
         const coreCount = Math.floor(count * coreRatio);
@@ -714,7 +923,7 @@
             const t = i / coreCount;
             const phi = Math.acos(1 - 2 * t);
             const theta = Math.PI * (1 + Math.sqrt(5)) * i;
-            
+
             const radius = 20 * Math.pow(Math.random(), 2);
 
             const x = radius * Math.sin(phi) * Math.cos(theta);
@@ -725,7 +934,7 @@
         } else {
             const ringParticles = count - coreCount;
             const ringIndex = i - coreCount;
-            
+
             const numRings = 6;
             const ringNum = Math.floor(ringIndex / (ringParticles / numRings));
             const nodeInRing = ringIndex % Math.floor(ringParticles / numRings);
@@ -751,13 +960,13 @@
             return pos;
         }
     }
-    
+
     const visualizations = [
         generateDataStream,
         generateHolographicNetwork,
         generatePulsarCore
     ];
-    
+
     const colorSchemes = [
         [
             new THREE.Color(0x00ff88),
@@ -790,34 +999,34 @@
             new THREE.Color(0xff6600)
         ]
     ];
-    
+
     function createTrailSystem() {
         const trailGeometry = new THREE.BufferGeometry();
         const trailPositions = new Float32Array(trailCount * 3);
         const trailColors = new Float32Array(trailCount * 3);
         const trailSizes = new Float32Array(trailCount);
         const trailOpacities = new Float32Array(trailCount);
-        
+
         for (let i = 0; i < trailCount; i++) {
             trailPositions[i * 3] = (Math.random() - 0.5) * 100;
             trailPositions[i * 3 + 1] = (Math.random() - 0.5) * 100;
             trailPositions[i * 3 + 2] = (Math.random() - 0.5) * 100;
-            
+
             const colorScheme = colorSchemes[currentVisualization];
             const color = colorScheme[Math.floor(Math.random() * colorScheme.length)];
             trailColors[i * 3] = color.r;
             trailColors[i * 3 + 1] = color.g;
             trailColors[i * 3 + 2] = color.b;
-            
+
             trailSizes[i] = Math.random() * 1.5 + 0.5;
             trailOpacities[i] = Math.random() * 0.5 + 0.2;
         }
-        
+
         trailGeometry.setAttribute('position', new THREE.BufferAttribute(trailPositions, 3));
         trailGeometry.setAttribute('color', new THREE.BufferAttribute(trailColors, 3));
         trailGeometry.setAttribute('size', new THREE.BufferAttribute(trailSizes, 1));
         trailGeometry.setAttribute('opacity', new THREE.BufferAttribute(trailOpacities, 1));
-        
+
         const trailTexture = createTrailTexture();
         const trailMaterial = new THREE.PointsMaterial({
             size: 2.0,
@@ -828,59 +1037,59 @@
             depthWrite: false,
             opacity: 0.6
         });
-        
+
         trailSystem = new THREE.Points(trailGeometry, trailMaterial);
         scene.add(trailSystem);
     }
-    
+
     function createTrailTexture() {
         const canvas = document.createElement('canvas');
         canvas.width = 32;
         canvas.height = 32;
         const context = canvas.getContext('2d');
-        
+
         const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
         gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
         gradient.addColorStop(0.3, 'rgba(255, 255, 255, 0.4)');
         gradient.addColorStop(0.7, 'rgba(255, 255, 255, 0.1)');
         gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        
+
         context.fillStyle = gradient;
         context.fillRect(0, 0, 32, 32);
-        
+
         const texture = new THREE.CanvasTexture(canvas);
         texture.needsUpdate = true;
         return texture;
     }
-    
+
     function createBackgroundParticles() {
         const bgGeometry = new THREE.BufferGeometry();
         const bgCount = 2000;
         const bgPositions = new Float32Array(bgCount * 3);
         const bgColors = new Float32Array(bgCount * 3);
         const bgSizes = new Float32Array(bgCount);
-        
+
         for (let i = 0; i < bgCount; i++) {
             const radius = 200 + Math.random() * 300;
             const phi = Math.random() * Math.PI * 2;
             const theta = Math.random() * Math.PI;
-            
+
             bgPositions[i * 3] = radius * Math.sin(theta) * Math.cos(phi);
             bgPositions[i * 3 + 1] = radius * Math.sin(theta) * Math.sin(phi);
             bgPositions[i * 3 + 2] = radius * Math.cos(theta);
-            
+
             const intensity = Math.random() * 0.3 + 0.1;
             bgColors[i * 3] = intensity * 0.2;
             bgColors[i * 3 + 1] = intensity * 0.5;
             bgColors[i * 3 + 2] = intensity * 0.3;
-            
+
             bgSizes[i] = Math.random() * 2 + 0.5;
         }
-        
+
         bgGeometry.setAttribute('position', new THREE.BufferAttribute(bgPositions, 3));
         bgGeometry.setAttribute('color', new THREE.BufferAttribute(bgColors, 3));
         bgGeometry.setAttribute('size', new THREE.BufferAttribute(bgSizes, 1));
-        
+
         const bgMaterial = new THREE.PointsMaterial({
             size: 1.0,
             vertexColors: true,
@@ -889,40 +1098,40 @@
             blending: THREE.AdditiveBlending,
             depthWrite: false
         });
-        
+
         backgroundNodes = new THREE.Points(bgGeometry, bgMaterial);
         scene.add(backgroundNodes);
     }
-    
+
     function initializeSystem() {
         scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x000814, 0.0006);
-        
+
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(0, 0, 120);
-        
-        renderer = new THREE.WebGLRenderer({ 
-            antialias: true, 
+
+        renderer = new THREE.WebGLRenderer({
+            antialias: true,
             alpha: true,
-            powerPreference: "high-performance" 
+            powerPreference: "high-performance"
         });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.1;
         document.getElementById('container').appendChild(renderer.domElement);
-        
+
         setupCameraControls();
         setupPostProcessing();
         createDataVisualization();
         createTrailSystem();
         createBackgroundParticles();
         setupEventHandlers();
-        
+
         displayVisualizationName(visualizationNames[currentVisualization]);
         executeMainLoop();
     }
-    
+
     function setupCameraControls() {
         controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
@@ -933,13 +1142,13 @@
         controls.maxDistance = 300;
         controls.enablePan = false;
         controls.autoRotate = true;
-        controls.autoRotateSpeed = 0.3; 
+        controls.autoRotateSpeed = 0.3;
     }
-    
+
     function setupPostProcessing() {
         composer = new EffectComposer(renderer);
         composer.addPass(new RenderPass(scene, camera));
-        
+
         const bloomPass = new UnrealBloomPass(
             new THREE.Vector2(window.innerWidth, window.innerHeight),
             0.4,
@@ -947,33 +1156,33 @@
             0.85
         );
         composer.addPass(bloomPass);
-        
+
         composer.addPass(new OutputPass());
     }
-    
+
     function createDataVisualization() {
         const geometry = new THREE.BufferGeometry();
         const positions = new Float32Array(nodeCount * 3);
         const colors = new Float32Array(nodeCount * 3);
         const sizes = new Float32Array(nodeCount);
-        
+
         const initialVisualization = visualizations[currentVisualization];
-        
+
         for (let i = 0; i < nodeCount; i++) {
             const pos = initialVisualization(i, nodeCount);
             positions[i * 3] = pos.x;
             positions[i * 3 + 1] = pos.y;
             positions[i * 3 + 2] = pos.z;
-            
+
             assignParticleProperties(i, colors, sizes, currentVisualization);
         }
-        
+
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
         geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-        
+
         geometry.userData.currentColors = new Float32Array(colors);
-        
+
         const texture = createEnhancedParticleTexture();
         const material = new THREE.PointsMaterial({
             size: 3.5,
@@ -983,7 +1192,7 @@
             blending: THREE.AdditiveBlending,
             depthWrite: false
         });
-        
+
         dataNodes = new THREE.Points(geometry, material);
         scene.add(dataNodes);
     }
@@ -1016,46 +1225,46 @@
                 sizes[i] = 0.8 + Math.random() * 1.5;
             }
         }
-        
+
         colors[i * 3] = color.r * brightness;
         colors[i * 3 + 1] = color.g * brightness;
         colors[i * 3 + 2] = color.b * brightness;
     }
-    
+
     function createEnhancedParticleTexture() {
         const canvas = document.createElement('canvas');
         canvas.width = 128;
         canvas.height = 128;
         const context = canvas.getContext('2d');
-        
+
         const centerX = 64, centerY = 64;
-        
+
         const outerGradient = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, 64);
         outerGradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
         outerGradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.6)');
         outerGradient.addColorStop(0.5, 'rgba(128, 255, 200, 0.3)');
         outerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        
+
         context.fillStyle = outerGradient;
         context.fillRect(0, 0, 128, 128);
-        
+
         const coreGradient = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, 12);
         coreGradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
         coreGradient.addColorStop(1, 'rgba(128, 255, 200, 0.2)');
-        
+
         context.fillStyle = coreGradient;
         context.beginPath();
         context.arc(centerX, centerY, 12, 0, Math.PI * 2);
         context.fill();
-        
+
         const texture = new THREE.CanvasTexture(canvas);
         texture.needsUpdate = true;
         return texture;
     }
-    
+
     function setupEventHandlers() {
         window.addEventListener('resize', onSystemResize);
-        
+
         const rotationSwitch = document.getElementById('rotation-switch');
         if (rotationSwitch) {
             rotationSwitch.addEventListener('click', () => {
@@ -1064,7 +1273,7 @@
                 rotationSwitch.classList.toggle('active', autoRotate);
             });
         }
-        
+
         const flowSwitch = document.getElementById('flow-switch');
         if (flowSwitch) {
             flowSwitch.addEventListener('click', () => {
@@ -1072,7 +1281,7 @@
                 flowSwitch.classList.toggle('active', dataFlow);
             });
         }
-        
+
         const trailsSwitch = document.getElementById('trails-switch');
         if (trailsSwitch) {
             trailsSwitch.addEventListener('click', () => {
@@ -1084,7 +1293,7 @@
                 }
             });
         }
-        
+
         const executeBtn = document.getElementById('execute-btn');
         if (executeBtn) {
             executeBtn.addEventListener('click', executeTransformation);
@@ -1102,32 +1311,32 @@
             });
         }
     }
-    
+
     function executeTransformation() {
         if (isTransforming) return;
-        
+
         const nextVisualization = (currentVisualization + 1) % visualizations.length;
         transformToVisualization(nextVisualization);
         displayVisualizationName(visualizationNames[nextVisualization]);
     }
-    
+
     function transformToVisualization(newVisualization) {
         isTransforming = true;
         transformProgress = 0;
-        
+
         const positions = dataNodes.geometry.attributes.position.array;
         const colors = dataNodes.geometry.attributes.color.array;
         const sizes = dataNodes.geometry.attributes.size.array;
-        
+
         const currentPositions = new Float32Array(positions);
         const currentColors = new Float32Array(dataNodes.geometry.userData.currentColors);
         const currentSizes = new Float32Array(sizes);
-        
+
         const visualizationFunction = visualizations[newVisualization];
         const newPositions = new Float32Array(positions.length);
         const newColors = new Float32Array(colors.length);
         const newSizes = new Float32Array(sizes.length);
-        
+
         for (let i = 0; i < nodeCount; i++) {
             const pos = visualizationFunction(i, nodeCount);
             newPositions[i * 3] = pos.x;
@@ -1135,7 +1344,7 @@
             newPositions[i * 3 + 2] = pos.z;
             assignParticleProperties(i, newColors, newSizes, newVisualization);
         }
-        
+
         dataNodes.userData.fromPositions = currentPositions;
         dataNodes.userData.toPositions = newPositions;
         dataNodes.userData.fromColors = currentColors;
@@ -1143,7 +1352,7 @@
         dataNodes.userData.fromSizes = currentSizes;
         dataNodes.userData.toSizes = newSizes;
         dataNodes.userData.targetVisualization = newVisualization;
-        
+
         if (trailSystem) {
             const trailColors = trailSystem.geometry.attributes.color.array;
             const newColorScheme = colorSchemes[newVisualization];
@@ -1156,36 +1365,36 @@
             trailSystem.geometry.attributes.color.needsUpdate = true;
         }
     }
-    
+
     function displayVisualizationName(name) {
         const modeElement = document.getElementById('mode-display');
         modeElement.textContent = name;
     }
-    
+
     function updateSystemStatus() {
         frameCount++;
         const currentTime = performance.now();
-        
+
         if (currentTime - lastTime >= 1000) {
             fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
             document.getElementById('fps-display').textContent = fps;
             document.getElementById('node-display').textContent = nodeCount.toLocaleString();
-            
+
             frameCount = 0;
             lastTime = currentTime;
         }
     }
-    
+
     function animateTrailSystem() {
         if (!trailSystem || !showTrails) return;
-        
+
         const positions = trailSystem.geometry.attributes.position.array;
         const opacities = trailSystem.geometry.attributes.opacity.array;
-        
+
         for (let i = 0; i < trailCount; i++) {
             const ix = i * 3, iy = ix + 1, iz = ix + 2;
-            
-            switch(currentVisualization) {
+
+            switch (currentVisualization) {
                 case 0:
                     positions[iy] += 0.3;
                     if (positions[iy] > 60) positions[iy] = -60;
@@ -1209,20 +1418,20 @@
                     positions[iz] = x * Math.sin(orbitSpeed) + z * Math.cos(orbitSpeed);
                     break;
             }
-            
+
             opacities[i] = 0.3 + Math.sin(time * 3 + i * 0.1) * 0.3;
         }
-        
+
         trailSystem.geometry.attributes.position.needsUpdate = true;
         trailSystem.geometry.attributes.opacity.needsUpdate = true;
     }
-    
+
     function animateDataFlow() {
         if (!dataNodes || isTransforming || !dataFlow) return;
-        
+
         const positions = dataNodes.geometry.attributes.position.array;
-        
-        switch(currentVisualization) {
+
+        switch (currentVisualization) {
             case 0:
                 for (let i = 0; i < nodeCount; i++) {
                     const iy = i * 3 + 1;
@@ -1238,7 +1447,7 @@
                     const ix = i * 3, iz = i * 3 + 2;
                     const x = positions[ix];
                     const z = positions[iz];
-                    
+
                     const rotationSpeed = 0.005 + (layerIndex % 3) * 0.003;
                     positions[ix] = x * Math.cos(rotationSpeed) - z * Math.sin(rotationSpeed);
                     positions[iz] = x * Math.sin(rotationSpeed) + z * Math.cos(rotationSpeed);
@@ -1271,42 +1480,42 @@
                 break;
         }
     }
-    
+
     function onSystemResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
         composer.setSize(window.innerWidth, window.innerHeight);
     }
-    
+
     function executeMainLoop() {
         requestAnimationFrame(executeMainLoop);
         time += 0.01;
-        
+
         updateSystemStatus();
         controls.update();
-        
+
         if (backgroundNodes) {
             backgroundNodes.rotation.y += 0.0003;
             backgroundNodes.rotation.x += 0.0001;
         }
-        
+
         if (isTransforming) {
             transformProgress += transformSpeed;
-            
+
             if (transformProgress >= 1.0) {
                 const positions = dataNodes.geometry.attributes.position.array;
                 const colors = dataNodes.geometry.attributes.color.array;
                 const sizes = dataNodes.geometry.attributes.size.array;
-                
+
                 positions.set(dataNodes.userData.toPositions);
                 colors.set(dataNodes.userData.toColors);
                 sizes.set(dataNodes.userData.toSizes);
-                
+
                 dataNodes.geometry.attributes.position.needsUpdate = true;
                 dataNodes.geometry.attributes.color.needsUpdate = true;
                 dataNodes.geometry.attributes.size.needsUpdate = true;
-                
+
                 dataNodes.geometry.userData.currentColors = new Float32Array(dataNodes.userData.toColors);
                 currentVisualization = dataNodes.userData.targetVisualization;
                 isTransforming = false;
@@ -1315,22 +1524,22 @@
                 const positions = dataNodes.geometry.attributes.position.array;
                 const colors = dataNodes.geometry.attributes.color.array;
                 const sizes = dataNodes.geometry.attributes.size.array;
-                
+
                 const t = transformProgress;
                 const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-                
+
                 for (let i = 0; i < positions.length; i++) {
-                    positions[i] = dataNodes.userData.fromPositions[i] * (1 - ease) + 
-                                   dataNodes.userData.toPositions[i] * ease;
-                    colors[i] = dataNodes.userData.fromColors[i] * (1 - ease) + 
-                                dataNodes.userData.toColors[i] * ease;
+                    positions[i] = dataNodes.userData.fromPositions[i] * (1 - ease) +
+                        dataNodes.userData.toPositions[i] * ease;
+                    colors[i] = dataNodes.userData.fromColors[i] * (1 - ease) +
+                        dataNodes.userData.toColors[i] * ease;
                 }
-                
+
                 for (let i = 0; i < sizes.length; i++) {
-                    sizes[i] = dataNodes.userData.fromSizes[i] * (1 - ease) + 
-                               dataNodes.userData.toSizes[i] * ease;
+                    sizes[i] = dataNodes.userData.fromSizes[i] * (1 - ease) +
+                        dataNodes.userData.toSizes[i] * ease;
                 }
-                
+
                 dataNodes.geometry.attributes.position.needsUpdate = true;
                 dataNodes.geometry.attributes.color.needsUpdate = true;
                 dataNodes.geometry.attributes.size.needsUpdate = true;
@@ -1338,7 +1547,7 @@
         } else {
             animateDataFlow();
         }
-        
+
         animateTrailSystem();
         composer.render();
     }
