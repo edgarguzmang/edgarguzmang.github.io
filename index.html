@@ -1,233 +1,46 @@
-<!DOCTYPE html>
-<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xbox 360 Metro Ultimate Edition</title>
-    <style>
-        :root {
-            --xbox-green: #107c10;
-            --bg-dark: #111;
-            --transition-speed: 0.4s;
-        }
+    <title>HYPER SCROLL // BRUTAL MODE</title>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&family=Syncopate:wght@400;700&display=swap"
+        rel="stylesheet">
 
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            background: radial-gradient(circle at center, #333 0%, #050505 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
-            color: white; overflow: hidden;
-        }
-
-        /* DASHBOARD PRINCIPAL */
-        .dashboard {
-            height: 100vh; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            transition: background 0.5s;
-        }
-
-        /* NAVEGACIÓN SUPERIOR */
-        .top-nav {
-            display: flex; gap: 30px; margin-bottom: 30px; z-index: 100;
-        }
-
-        .nav-item {
-            font-size: 24px; color: #666; cursor: pointer;
-            transition: 0.3s; font-weight: 300; text-transform: lowercase;
-        }
-
-        .nav-item.active {
-            color: white; font-weight: bold; transform: scale(1.1);
-            border-bottom: 3px solid white;
-        }
-
-        /* ESCENARIO DE MOVIMIENTO */
-        .main-stage {
-            display: flex; align-items: center; justify-content: center;
-            width: 100%; max-width: 1300px; position: relative;
-        }
-
-        /* VENTANA DE RECORTE (VIEWPORT) */
-        .viewport {
-            width: 900px; height: 400px; overflow: hidden; position: relative;
-        }
-
-        .grid-wrapper {
-            display: flex; position: absolute; left: 0;
-            transition: transform var(--transition-speed) cubic-bezier(0.18, 0.89, 0.32, 1.1);
-        }
-
-        .grid-page {
-            display: grid; grid-template-columns: repeat(4, 200px);
-            grid-template-rows: repeat(2, 180px);
-            gap: 15px; width: 900px; padding-right: 50px;
-        }
-
-        /* TILES (CUADROS) */
-        .tile {
-            background: #222; border: 4px solid transparent;
-            position: relative; transition: 0.2s; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
-
-        .tile:hover, .tile.selected {
-            border-color: white; transform: scale(1.05); z-index: 10;
-        }
-
-        .tile img { width: 100%; height: 100%; object-fit: cover; }
-        .tile-large { grid-column: span 2; grid-row: span 2; }
-        .bg-green { background-color: var(--xbox-green); }
-        .tile-label { 
-            position: absolute; bottom: 0; left: 0; right: 0;
-            background: rgba(0,0,0,0.7); padding: 8px; font-size: 13px;
-        }
-
-        /* AVATAR FIJO */
-        .avatar-area {
-            width: 250px; display: flex; flex-direction: column; align-items: center;
-            animation: fadeIn 1s ease-in;
-        }
-
-        .avatar-img { 
-            width: 100%; filter: drop-shadow(0 20px 30px black);
-            transform: perspective(500px) rotateY(-10deg);
-        }
-
-        .gamertag-tag {
-            background: rgba(255,255,255,0.05); padding: 15px; width: 100%;
-            border-left: 5px solid var(--xbox-green); margin-top: -20px;
-        }
-
-        /* PANTALLA DE CONFIGURACIÓN */
-        .full-screen-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #111; z-index: 200; display: none;
-            flex-direction: column; padding: 5vw; box-sizing: border-box;
-        }
-
-        /* RESPONSIVO */
-        @media (max-width: 1000px) {
-            .main-stage { flex-direction: column; }
-            .viewport { width: 95vw; height: auto; overflow: visible; }
-            .grid-page { grid-template-columns: repeat(2, 1fr); width: 95vw; }
-            .avatar-area { order: -1; width: 150px; margin-bottom: 20px; }
-            .tile-large { grid-row: span 1; }
-        }
-
-        @keyframes fadeIn { from {opacity: 0} to {opacity: 1} }
-    </style>
 </head>
+
 <body>
 
-    <div class="dashboard" id="db">
-        <nav class="top-nav" id="topNav">
-            <span class="nav-item active" data-page="0">home</span>
-            <span class="nav-item" data-page="1">social</span>
-            <span class="nav-item" data-page="2">games</span>
-            <span class="nav-item" onclick="toggleSettings(true)">settings</span>
-        </nav>
+    <!-- OVERLAYS -->
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    <div class="noise"></div>
 
-        <div class="main-stage">
-            <div class="viewport">
-                <div class="grid-wrapper" id="wrapper">
-                    
-                    <div class="grid-page">
-                        <div class="tile"><img src="https://media.redadn.es/imagenes/fifa-13_150821.jpg"><div class="tile-label">Fifa 13</div></div>
-                        <div class="tile tile-large"><img src="https://assets1.ignimgs.com/2012/09/05/halo-4-button-02jpg-046779.jpg"><div class="tile-label">Halo 4</div></div>
-                        <div class="tile bg-green"><div style="font-size:50px; text-align:center; margin-top:40px">📌</div><div class="tile-label">Mis Pins</div></div>
-                        <div class="tile bg-green"><div style="font-size:50px; text-align:center; margin-top:40px">🕒</div><div class="tile-label">Recientes</div></div>
-                        <div class="tile"><img src="https://m.media-amazon.com/images/M/MV5BMjA4NDg3NzYxMF5BMl5BanBnXkFtZTcwNjUxNjE3Nw@@._V1_.jpg"><div class="tile-label">Películas</div></div>
-                    </div>
-
-                    <div class="grid-page">
-                        <div class="tile tile-large bg-green" style="padding:20px">
-                            <h2>Amigos Online</h2>
-                            <hr>
-                            <p>Ingrid - Jugando React</p>
-                            <p>Mario - Ausente</p>
-                        </div>
-                        <div class="tile bg-green"><div style="font-size:50px; text-align:center; margin-top:40px">✉️</div><div class="tile-label">Mensajes</div></div>
-                        <div class="tile"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"></div>
-                        <div class="tile bg-green"><div style="font-size:50px; text-align:center; margin-top:40px">🏆</div><div class="tile-label">Logros</div></div>
-                    </div>
-
-                    <div class="grid-page" id="deptGrid">
-                        <div class="tile bg-green" style="padding:15px"><h3>Sistemas</h3><p>Activo</p></div>
-                        <div class="tile" style="background:#444; padding:15px"><h3>Ventas</h3><p>Inactivo</p></div>
-                        <div class="tile" style="background:#444; padding:15px"><h3>RH</h3><p>Activo</p></div>
-                        <div class="tile tile-large"><img src="https://m.media-amazon.com/images/I/81+q+1y6y1L._AC_SL1500_.jpg"></div>
-                    </div>
-
-                </div>
-            </div>
-
-            <aside class="avatar-area">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&clothingColor=107c10&mouth=smile" class="avatar-img">
-                <div class="gamertag-tag">
-                    <div style="font-size: 24px; font-weight: bold;">Athena360</div>
-                    <div style="color: var(--xbox-green); font-weight: bold;">2800 G</div>
-                </div>
-            </aside>
+    <!-- HUD -->
+    <div class="hud">
+        <div class="hud-top">
+            <span>SYS.READY</span>
+            <div class="hud-line"></div>
+            <span>FPS: <strong id="fps">60</strong></span>
+        </div>
+        <div class="center-nav"
+            style="align-self: flex-start; margin-top: auto; margin-bottom: auto; writing-mode: vertical-rl; transform: rotate(180deg);">
+            SCROLL VELOCITY // <strong id="vel-readout">0.00</strong>
+        </div>
+        <div class="hud-bottom">
+            <span>COORD: <strong id="coord">000.000</strong></span>
+            <div class="hud-line"></div>
+            <span>VER 2.0.4 [BETA]</span>
         </div>
     </div>
 
-    <div id="settingsOverlay" class="full-screen-overlay">
-        <h1 style="font-weight: 100; font-size: 60px; margin: 0;">configuración</h1>
-        <p style="color: #888; margin-bottom: 40px;">sistema de consola</p>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
-            <div class="tile" style="padding: 20px; height: 100px;" onclick="toggleSettings(false)">
-                <h3>Volver</h3>
-                <p>Presiona para salir</p>
-            </div>
-            <div class="tile" style="padding: 20px; height: 100px;">
-                <h3>Perfil</h3>
-                <p>Edita tus datos</p>
-            </div>
-            <div class="tile" style="padding: 20px; height: 100px;">
-                <h3>Red</h3>
-                <p>Conexión activa</p>
-            </div>
-        </div>
+    <!-- 3D WORLD -->
+    <div class="viewport" id="viewport">
+        <div class="world" id="world"></div>
     </div>
 
-    <script>
-        const wrapper = document.getElementById('wrapper');
-        const navItems = document.querySelectorAll('.nav-item');
-        let currentPage = 0;
+    <div class="scroll-proxy"></div>
 
-        // Función para cambiar de página con animación
-        function goToPage(pageIndex) {
-            currentPage = pageIndex;
-            const offset = pageIndex * 900; // Ancho de la página
-            wrapper.style.transform = `translateX(-${offset}px)`;
-
-            // Actualizar clases de navegación
-            navItems.forEach((item, index) => {
-                item.classList.toggle('active', index === pageIndex);
-            });
-        }
-
-        // Eventos de clic en el menú
-        navItems.forEach((item, index) => {
-            item.addEventListener('click', () => {
-                if(item.innerText !== 'settings') goToPage(index);
-            });
-        });
-
-        // Soporte para TECLADO (Flechas)
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "ArrowRight" && currentPage < 2) {
-                goToPage(currentPage + 1);
-            } else if (e.key === "ArrowLeft" && currentPage > 0) {
-                goToPage(currentPage - 0);
-            }
-        });
-
-        // Mostrar/Ocultar Settings
-        function toggleSettings(show) {
-            const overlay = document.getElementById('settingsOverlay');
-            overlay.style.display = show ? 'flex' : 'none';
-        }
-    </script>
 </body>
-</html>
